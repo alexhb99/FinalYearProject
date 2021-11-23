@@ -6,6 +6,8 @@ TagManager:
   tags:
   - TerrainTilemap
   - Pathfinding
+  - EnvironmentController
+  - Creatures
   layers:
   - Default
   - TransparentFX

@@ -6,10 +6,9 @@ using UnityEngine.Tilemaps;
 public class TerrainGenerator : MonoBehaviour
 {
     private Tilemap tilemap;
-    private Grid gridController;
+    private GridController gridController;
     private TerrainDatabase terrainDatabase;
 
-    public TileBase tile;
     public Vector2Int size;
     public TerrainType[,] terrain;
 
@@ -29,20 +28,11 @@ public class TerrainGenerator : MonoBehaviour
     private void Start()
     {
         tilemap = GameObject.FindWithTag("TerrainTilemap").GetComponent<Tilemap>();
-        gridController = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
+        gridController = GameObject.FindWithTag("Pathfinding").GetComponent<GridController>();
         terrainDatabase = GetComponent<TerrainDatabase>();
-        GenerateTerrain();
     }
 
-    private void FixedUpdate()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GenerateTerrain();
-        }
-    }
-
-    private void GenerateTerrain()
+    public void GenerateTerrain()
     {
         GenerateHeightmap();
 
@@ -63,6 +53,7 @@ public class TerrainGenerator : MonoBehaviour
                         break;
                     }
                     tiles[x * size.y + y] = terrainType.tile;
+                    terrain[x, y] = terrainType;
                 }                
             }
         }
