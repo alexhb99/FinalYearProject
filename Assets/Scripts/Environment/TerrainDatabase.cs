@@ -19,7 +19,8 @@ public class TerrainType
 {
     public string name;
     public TileBase tile;
-    public bool walkable;
+    [Range(0, 1)]
+    public float walkSpeed;
 
     [Range(0, 1)]
     public float height;

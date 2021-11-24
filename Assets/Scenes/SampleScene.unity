@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ant: {fileID: 8164670627821518378, guid: 5def7acda097ff2479bc4e714b6fc4d2, type: 3}
-  antCount: 100
+  antCount: 0
 --- !u!4 &8776168
 Transform:
   m_ObjectHideFlags: 0
@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -194,6 +195,22 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9487065960729340820bdb41c110994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  scrollSpeed: 5
+  dragSpeed: 5
+  camZoomBounds: {x: 1, y: 200}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -357,6 +374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridStartPos: {x: 0, y: 0, z: 0}
   size: {x: 4, y: 4}
+  displayGridGizmos: 0
 --- !u!4 &813910958
 Transform:
   m_ObjectHideFlags: 0
@@ -560,19 +578,19 @@ MonoBehaviour:
   terrainTypes:
   - name: Dirt
     tile: {fileID: 11400000, guid: 2f8ce2f86abffbe47b52127e584b2242, type: 2}
-    walkable: 1
+    walkSpeed: 1
     height: 0
   - name: Tall Dirt
     tile: {fileID: 11400000, guid: f10d1780cfc77b44e9c23676ff893c11, type: 2}
-    walkable: 1
+    walkSpeed: 0.5
     height: 0.4
   - name: Water
     tile: {fileID: 11400000, guid: 71b066d48b5bebd4a9d96c382047e0ab, type: 2}
-    walkable: 0
+    walkSpeed: 0.1
     height: 0.7
   - name: Deep Water
     tile: {fileID: 11400000, guid: 5fd65ce1a594c2947bb24bb004e3a795, type: 2}
-    walkable: 0
+    walkSpeed: 0
     height: 0.85
 --- !u!114 &1432954822
 MonoBehaviour:

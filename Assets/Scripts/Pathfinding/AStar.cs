@@ -43,7 +43,7 @@ public class AStar : MonoBehaviour
                 {
                     if (!neighbour.walkable || closedSet.Contains(neighbour)) continue;
 
-                    int neighbourCost = currentNode.gCost + GetDistance(currentNode, neighbour);
+                    int neighbourCost = Mathf.CeilToInt(currentNode.gCost + GetDistance(currentNode, neighbour) / neighbour.walkSpeed);
                     if (neighbourCost < neighbour.gCost || !openSet.Contains(neighbour))
                     {
                         neighbour.gCost = neighbourCost;
@@ -69,8 +69,26 @@ public class AStar : MonoBehaviour
                 waypoints.Add(currentNode.worldPosition);
                 currentNode = currentNode.parent;
             }
+            waypoints = SimplifyPath(waypoints);
+            waypoints.Reverse();
         }
-        waypoints.Reverse();
+        return waypoints;
+    }
+
+    private List<Vector3> SimplifyPath(List<Vector3> path)
+    {
+        List<Vector3> waypoints = new List<Vector3>();
+        Vector2 directionOld = Vector2.zero;
+        for (int i = 1; i < path.Count; i++)
+        {
+            Vector2 directionNew = new Vector2(path[i - 1].x - path[i].x, path[i - 1].y - path[i].y);
+            if (directionNew != directionOld)
+            {
+                waypoints.Add(path[i-1]);
+            }
+            directionOld = directionNew;
+        }
+        waypoints.Add(path[path.Count - 1]);
         return waypoints;
     }
 
@@ -80,7 +98,7 @@ public class AStar : MonoBehaviour
         int dstY = Mathf.Abs(nodeA.pos.y - nodeB.pos.y);
 
         if (dstX > dstY)
-            return 14 * dstY + 10 * (dstX - dstY);
-        return 14 * dstX + 10 * (dstY - dstX);
+            return 140 * dstY + 100 * (dstX - dstY);
+        return 140 * dstX + 100 * (dstY - dstX);
     }
 }
