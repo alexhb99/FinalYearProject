@@ -374,7 +374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridStartPos: {x: 0, y: 0, z: 0}
   size: {x: 4, y: 4}
-  displayGridGizmos: 0
+  displayGridGizmos: 1
 --- !u!4 &813910958
 Transform:
   m_ObjectHideFlags: 0

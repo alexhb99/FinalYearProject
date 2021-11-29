@@ -84,7 +84,7 @@ public class GridController : MonoBehaviour
         {
             foreach (Node n in grid)
             {
-                Gizmos.color = (n.walkable) ? Color.white : Color.red;
+                Gizmos.color = Color.Lerp(Color.red, Color.white, n.walkSpeed);
                 Gizmos.DrawCube(n.worldPosition, Vector3.one * (0.9f));
             }
         }

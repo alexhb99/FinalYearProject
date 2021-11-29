@@ -26,6 +26,22 @@ public class NavigationAgent : MonoBehaviour
         }
     }
 
+    /*
+    private Vector3 targetPos;
+    void OnDrawGizmos()
+    {
+        if (path != null)
+        {
+            foreach (Vector3 n in path)
+            {
+                Gizmos.color = Color.black;
+                Gizmos.DrawCube(n, Vector3.one * (1f));
+            }
+            Gizmos.color = Color.blue;
+            Gizmos.DrawCube(targetPos, Vector3.one * (1.1f));
+        }
+    }*/
+
     public void GetRandomPath()
     {
         int randX, randY;
@@ -33,6 +49,7 @@ public class NavigationAgent : MonoBehaviour
         {
             randX = Random.Range(0, pathfinding.grid.size.x);
             randY = Random.Range(0, pathfinding.grid.size.y);
+            //targetPos = new Vector3(randX, randY, 0);
 
             if (pathfinding.grid.grid[randX, randY].walkable)
             {
