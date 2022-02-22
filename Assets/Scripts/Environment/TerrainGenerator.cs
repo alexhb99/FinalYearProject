@@ -25,6 +25,11 @@ public class TerrainGenerator : MonoBehaviour
 
     private float[,] heightmap;
 
+    [HideInInspector]
+    public Vector3 size3;
+    [HideInInspector]
+    public Bounds terrainBounds;
+
     private void Start()
     {
         tilemap = GameObject.FindWithTag("TerrainTilemap").GetComponent<Tilemap>();
@@ -60,6 +65,9 @@ public class TerrainGenerator : MonoBehaviour
         tilemap.SetTiles(positions, tiles);
 
         gridController.CreateGrid(size);
+
+        size3 = new Vector3(size.x, size.y, 0);
+        terrainBounds = new Bounds(size3 / 2f + tilemap.transform.position, size3);
     }
 
     private void GenerateHeightmap()

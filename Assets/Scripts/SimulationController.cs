@@ -5,9 +5,12 @@ using UnityEngine;
 public class SimulationController : MonoBehaviour
 {
     private Transform creatureParent;
-    public GameObject ant;
+    public GameObject antAStar;
+    public GameObject antP;
     [Min(0)]
     public int antCount;
+
+    public bool isPheromones;
 
     private TerrainGenerator terrainGenerator;
     private GridController gridController;
@@ -55,6 +58,6 @@ public class SimulationController : MonoBehaviour
             }
         }
 
-        Instantiate(ant, new Vector3(gridController.gridStartPos.x + randX, gridController.gridStartPos.y + randY, 0), Quaternion.identity, creatureParent);
+        Instantiate(isPheromones ? antP : antAStar, new Vector3(gridController.gridStartPos.x + randX, gridController.gridStartPos.y + randY, 0), Quaternion.identity, creatureParent);
     }
 }
