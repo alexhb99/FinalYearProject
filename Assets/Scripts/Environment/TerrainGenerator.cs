@@ -37,6 +37,39 @@ public class TerrainGenerator : MonoBehaviour
         terrainDatabase = GetComponent<TerrainDatabase>();
     }
 
+    public List<TerrainType> GetTerrainInBounds(BoundsInt bounds)
+    {
+        TileBase[] tileArray = tilemap.GetTilesBlock(bounds);
+        List<TileBase> accTiles = new List<TileBase>();
+        List<TerrainType> tts = new List<TerrainType>();
+
+        foreach (TileBase t in tileArray)
+        {
+            accTiles.Add(null);
+            if (t != null)
+            {
+                tts.Add(terrainDatabase.tileBaseToTerrainType[t]);
+            }
+            else
+            {
+                tts.Add(null);
+            }
+        }
+
+        //tilemap.SetTilesBlock(bounds, accTiles.ToArray());
+        return tts;
+    }
+
+    public TerrainType GetTileAtPos(Vector3Int pos)
+    {
+        TileBase tileBase = tilemap.GetTile(pos);
+        if(tileBase != null)
+        {
+            return terrainDatabase.tileBaseToTerrainType[tileBase];
+        }
+        return null;
+    }
+
     public void GenerateTerrain()
     {
         GenerateHeightmap();

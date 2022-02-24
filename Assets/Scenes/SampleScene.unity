@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   antAStar: {fileID: 8164670627821518378, guid: 5def7acda097ff2479bc4e714b6fc4d2, type: 3}
   antP: {fileID: 8164670627821518378, guid: c316bff53858823498d0651405183206, type: 3}
-  antCount: 100
+  antCount: 1
   isPheromones: 1
 --- !u!4 &8776168
 Transform:
@@ -241,7 +241,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 60
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -265,7 +265,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 50, y: 50, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
