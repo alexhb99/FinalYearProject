@@ -13,11 +13,13 @@ public class SimulationController : MonoBehaviour
     public bool isPheromones;
 
     private TerrainGenerator terrainGenerator;
+    private FloraGenerator floraGenerator;
     private GridController gridController;
 
     private void Start()
     {
         terrainGenerator = GameObject.FindWithTag("EnvironmentController").GetComponent<TerrainGenerator>();
+        floraGenerator = terrainGenerator.GetComponent<FloraGenerator>();
         gridController = GameObject.FindWithTag("Pathfinding").GetComponent<GridController>();
         creatureParent = GameObject.FindWithTag("Creatures").transform;        
     }
@@ -25,6 +27,7 @@ public class SimulationController : MonoBehaviour
     private void StartSimulation()
     {
         terrainGenerator.GenerateTerrain();
+        floraGenerator.GenerateFlora();
         for (int i = 0; i < antCount; i++)
         {
             SpawnAnt();

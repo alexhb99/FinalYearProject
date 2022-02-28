@@ -8,6 +8,7 @@ TagManager:
   - Pathfinding
   - EnvironmentController
   - Creatures
+  - FoodParent
   layers:
   - Default
   - TransparentFX

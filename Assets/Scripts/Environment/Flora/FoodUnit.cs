@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pheromones : MonoBehaviour
+public class FoodUnit : MonoBehaviour
 {
-    
+    public float nutrition;
 }

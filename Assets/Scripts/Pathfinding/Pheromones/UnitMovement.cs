@@ -42,7 +42,7 @@ public class UnitMovement : MonoBehaviour
     private void MoveAnt()
     {
         UpdateScannerBounds();
-        Vector3 offset = GetBorderOffset();
+        Vector3 offset = AvoidUnwalkableTerrain();
 
         Vector3 randDir = Random.insideUnitCircle * turnDeviation;
         desiredDirection = (desiredDirection + randDir + offset).normalized;
@@ -95,11 +95,12 @@ public class UnitMovement : MonoBehaviour
         }
     }
 
-    //Move away from the borders of the map
-    private Vector3 GetBorderOffset()
+    //Move away from borders and unwalkable terrain
+    private Vector3 AvoidUnwalkableTerrain()
     {
         Vector3 normal = Vector3.zero;
 
+        //Avoid borders
         if(transform.position.x < terrainGenerator.terrainBounds.min.x + 1)
         {
             normal += Vector3.right;
@@ -117,6 +118,7 @@ public class UnitMovement : MonoBehaviour
             normal += Vector3.down;
         }
 
+        //Get terrain to sense
         List<TerrainType> sensedTiles = terrainGenerator.GetTerrainInBounds(obstacleSensorBounds).Where(x => x != null && x.walkSpeed == 0).ToList();
 
         Vector3 closestObstacle = Vector3.positiveInfinity;
@@ -126,6 +128,8 @@ public class UnitMovement : MonoBehaviour
         int leftSensorWallCount = 0;
         int rightSensorCount = 0;
         int rightSensorWallCount = 0;
+
+        //Go through each tile in sensed terrain
         foreach (Vector3Int pos in allPos)
         {
             TerrainType tt = terrainGenerator.GetTileAtPos(pos);
@@ -148,14 +152,16 @@ public class UnitMovement : MonoBehaviour
                 }
             }
 
+            //If unwalkable...
             if (tt != null && tt.walkSpeed == 0)
             {
-                //Get normals and distances
+                //Check if its the closest unwalkable tile, and set closest distance if so
                 Vector3 dstToObstacle = transform.position - pos;
                 if (dstToObstacle.sqrMagnitude < closestObstacle.sqrMagnitude)
                 {
                     closestObstacle = dstToObstacle;
                 }
+                //Add to normal
                 normal += dstToObstacle;
             }
         }
@@ -170,6 +176,7 @@ public class UnitMovement : MonoBehaviour
         offsetVector = normal;
         if (normal != Vector3.zero)
         {
+            //A vector at either -90 or 90 degrees to the front facing vector (transform.up) depending on left and right unwalkable terrain counts
             Vector3 incoming = (float)leftSensorWallCount / leftSensorCount < (float)rightSensorWallCount / rightSensorCount ? new Vector3(-transform.up.y, transform.up.x) : new Vector3(transform.up.y, -transform.up.x);
 
             if(Vector3.Dot(normal, transform.up) <= 0 && obstacleDistance > 3f)
