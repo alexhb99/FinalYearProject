@@ -5,4 +5,9 @@ using UnityEngine;
 public class FoodUnit : MonoBehaviour
 {
     public float nutrition;
+
+    public void Pickup()
+    {
+        Destroy(gameObject);
+    }
 }

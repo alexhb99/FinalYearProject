@@ -5,17 +5,19 @@ using UnityEngine;
 public class PheromoneStateMachine
 {
     public PheromoneState currentState;
+    public UnitMovement movement;
 
-    public void Initialize(PheromoneState startState)
+    public void Initialize(PheromoneState startState, UnitMovement movement)
     {
         currentState = startState;
-        startState.Enter();
+        this.movement = movement;
+        startState.Enter(movement);
     }
 
     public void ChangeState(PheromoneState newState)
     {
         currentState.Exit();
         currentState = newState;
-        newState.Enter();
+        newState.Enter(movement);
     }
 }

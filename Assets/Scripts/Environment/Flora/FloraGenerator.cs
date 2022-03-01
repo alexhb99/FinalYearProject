@@ -11,7 +11,8 @@ public class FloraGenerator : MonoBehaviour
     public bool useRatio;
 
     private GridController gridController;
-    private Transform foodParent;
+    [HideInInspector]
+    public Transform foodParent;
     private List<Node> availableSpaces;
 
     private void Start()

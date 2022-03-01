@@ -25,25 +25,38 @@ public class UnitMovement : MonoBehaviour
     float offsetDistance;
     Vector3 offsetVector;
 
+    [HideInInspector]
+    public Vector3? target;
+    [HideInInspector]
+    public Vector3 diff;
+
     private void Start()
     {
         size = new Vector3Int(3, 3, 1);
         halfSize = new Vector3Int(size.x / 2, size.y / 2, 0);
         offsetDistance = halfSize.magnitude + 1;
         offsetVector = Vector3.zero;
+        target = null;
         terrainGenerator = GameObject.FindWithTag("EnvironmentController").GetComponent<TerrainGenerator>();
     }
 
-    private void Update()
-    {
-        MoveAnt();
-    }
-
-    private void MoveAnt()
+    public void MoveAnt()
     {
         UpdateScannerBounds();
         Vector3 offset = AvoidUnwalkableTerrain();
 
+        if(target == null)
+        {
+            RandomWandering(offset);
+        }
+        else
+        {
+            WalkToTarget();
+        }
+    }
+
+    private void RandomWandering(Vector3 offset)
+    {
         Vector3 randDir = Random.insideUnitCircle * turnDeviation;
         desiredDirection = (desiredDirection + randDir + offset).normalized;
 
@@ -57,6 +70,25 @@ public class UnitMovement : MonoBehaviour
         float targetSpeed = Mathf.Max(0, moveSpeed * (obstacleDistance < 4f ? (obstacleDistance - 1) / 4f : 1));
         currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * acceleration);
         transform.position += currentSpeed * Time.deltaTime * transform.up;
+    }
+
+    private void WalkToTarget()
+    {
+        GetTargetDistance();
+        Vector3 direction = Vector3.RotateTowards(transform.up, diff, turnSpeed * (1 - Vector3.Dot(transform.up, diff)), 0f); //transform.up + desiredSteeringForce * Time.deltaTime;
+        direction.z = 0;
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, Time.deltaTime * acceleration);
+        transform.position += currentSpeed * Time.deltaTime * transform.up;
+    }
+
+    public void GetTargetDistance()
+    {
+        diff = (Vector3)(target - transform.position);
+        diff.z = 0;
     }
 
     private void UpdateScannerBounds()

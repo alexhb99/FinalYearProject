@@ -8,9 +8,9 @@ public class ReturningState : PheromoneState
     {
     }
 
-    public override void Enter()
+    public override void Enter(UnitMovement movement)
     {
-        base.Enter();
+        base.Enter(movement);
     }
 
     public override void Exit()

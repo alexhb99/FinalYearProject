@@ -26,11 +26,25 @@ public class SimulationController : MonoBehaviour
 
     private void StartSimulation()
     {
+        RemoveOldSimulation();
+
         terrainGenerator.GenerateTerrain();
         floraGenerator.GenerateFlora();
         for (int i = 0; i < antCount; i++)
         {
             SpawnAnt();
+        }
+    }
+
+    private void RemoveOldSimulation()
+    {
+        foreach(Transform child in creatureParent)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in floraGenerator.foodParent)
+        {
+            Destroy(child.gameObject);
         }
     }
 
