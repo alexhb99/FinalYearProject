@@ -133,9 +133,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   acceleration: 5
-  turnSpeed: 0.6
+  turnSpeed: 5
   turnDeviation: 0.2
   drawGizmos: 0
+  diff: {x: 0, y: 0, z: 0}
 --- !u!114 &-8330641085497512414
 MonoBehaviour:
   m_ObjectHideFlags: 0

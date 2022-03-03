@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitMovement : MonoBehaviour
+public class MovementUnit : MonoBehaviour
 {
     public float moveSpeed;
     public float acceleration;
@@ -40,10 +40,10 @@ public class UnitMovement : MonoBehaviour
         terrainGenerator = GameObject.FindWithTag("EnvironmentController").GetComponent<TerrainGenerator>();
     }
 
-    public void MoveAnt()
+    public void MoveAnt(Vector3 externalSteeringForce)
     {
         UpdateScannerBounds();
-        Vector3 offset = AvoidUnwalkableTerrain();
+        Vector3 offset = AvoidUnwalkableTerrain() + externalSteeringForce;
 
         if(target == null)
         {
@@ -60,12 +60,9 @@ public class UnitMovement : MonoBehaviour
         Vector3 randDir = Random.insideUnitCircle * turnDeviation;
         desiredDirection = (desiredDirection + randDir + offset).normalized;
 
-        Vector3 desiredSteeringForce = (desiredDirection - transform.up) * turnSpeed;
-        Vector3 direction = Vector3.RotateTowards(transform.up, desiredDirection, turnSpeed * (1 - Vector3.Dot(transform.up, desiredDirection)), 0f); //transform.up + desiredSteeringForce * Time.deltaTime;
-        direction.z = 0;
-
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        float angle = Mathf.Atan2(desiredDirection.y, desiredDirection.x) * Mathf.Rad2Deg - 90;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, turnSpeed);
 
         float targetSpeed = Mathf.Max(0, moveSpeed * (obstacleDistance < 4f ? (obstacleDistance - 1) / 4f : 1));
         currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * acceleration);
@@ -75,11 +72,10 @@ public class UnitMovement : MonoBehaviour
     private void WalkToTarget()
     {
         GetTargetDistance();
-        Vector3 direction = Vector3.RotateTowards(transform.up, diff, turnSpeed * (1 - Vector3.Dot(transform.up, diff)), 0f); //transform.up + desiredSteeringForce * Time.deltaTime;
-        direction.z = 0;
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        float angle = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg - 90;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, turnSpeed);
 
         currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, Time.deltaTime * acceleration);
         transform.position += currentSpeed * Time.deltaTime * transform.up;
@@ -151,7 +147,7 @@ public class UnitMovement : MonoBehaviour
         }
 
         //Get terrain to sense
-        List<TerrainType> sensedTiles = terrainGenerator.GetTerrainInBounds(obstacleSensorBounds).Where(x => x != null && x.walkSpeed == 0).ToList();
+        //List<TerrainType> sensedTiles = terrainGenerator.GetTerrainInBounds(obstacleSensorBounds).Where(x => x != null && x.walkSpeed == 0).ToList();
 
         Vector3 closestObstacle = Vector3.positiveInfinity;
         obstacleDistance = Mathf.Infinity;

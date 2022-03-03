@@ -5,6 +5,7 @@ using UnityEngine;
 public class SimulationController : MonoBehaviour
 {
     private Transform creatureParent;
+    public GameObject antColony;
     public GameObject antAStar;
     public GameObject antP;
     [Min(0)]
@@ -15,13 +16,15 @@ public class SimulationController : MonoBehaviour
     private TerrainGenerator terrainGenerator;
     private FloraGenerator floraGenerator;
     private GridController gridController;
+    private PheromoneController pheromoneController;
 
     private void Start()
     {
         terrainGenerator = GameObject.FindWithTag("EnvironmentController").GetComponent<TerrainGenerator>();
         floraGenerator = terrainGenerator.GetComponent<FloraGenerator>();
         gridController = GameObject.FindWithTag("Pathfinding").GetComponent<GridController>();
-        creatureParent = GameObject.FindWithTag("Creatures").transform;        
+        creatureParent = GameObject.FindWithTag("Creatures").transform;
+        pheromoneController = GetComponent<PheromoneController>();
     }
 
     private void StartSimulation()
@@ -30,6 +33,7 @@ public class SimulationController : MonoBehaviour
 
         terrainGenerator.GenerateTerrain();
         floraGenerator.GenerateFlora();
+        pheromoneController.GeneratePheromoneGrid();
         for (int i = 0; i < antCount; i++)
         {
             SpawnAnt();
@@ -59,6 +63,11 @@ public class SimulationController : MonoBehaviour
         {
             SpawnAnt();
         }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            SpawnAntColony();
+        }
     }
 
     private void SpawnAnt()
@@ -76,5 +85,22 @@ public class SimulationController : MonoBehaviour
         }
 
         Instantiate(isPheromones ? antP : antAStar, new Vector3(gridController.gridStartPos.x + randX, gridController.gridStartPos.y + randY, 0), Quaternion.identity, creatureParent);
+    }
+
+    private void SpawnAntColony()
+    {
+        int randX, randY;
+        while (true)
+        {
+            randX = Random.Range(0, gridController.size.x);
+            randY = Random.Range(0, gridController.size.y);
+
+            if (gridController.grid[randX, randY].walkable)
+            {
+                break;
+            }
+        }
+
+        Instantiate(antColony, new Vector3(gridController.gridStartPos.x + randX, gridController.gridStartPos.y + randY, 0), Quaternion.identity, creatureParent);
     }
 }

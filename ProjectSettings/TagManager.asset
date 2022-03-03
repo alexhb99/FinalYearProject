@@ -9,6 +9,7 @@ TagManager:
   - EnvironmentController
   - Creatures
   - FoodParent
+  - SimulationController
   layers:
   - Default
   - TransparentFX

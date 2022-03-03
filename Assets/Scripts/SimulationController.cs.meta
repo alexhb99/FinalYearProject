@@ -3,7 +3,10 @@ guid: 58f9a78362cdaa2469d8b65098f5e0f9
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - antColony: {fileID: 5112031259274006306, guid: 637af46f1a429e247bb08650e459a5e7, type: 3}
+  - antAStar: {fileID: 8164670627821518378, guid: 5def7acda097ff2479bc4e714b6fc4d2, type: 3}
+  - antP: {fileID: 8164670627821518378, guid: c316bff53858823498d0651405183206, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

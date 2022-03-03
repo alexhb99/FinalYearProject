@@ -5,12 +5,16 @@ using UnityEngine;
 public class PheromoneStateMachine
 {
     public PheromoneState currentState;
-    public UnitMovement movement;
+    public MovementUnit movement;
+    public PheromoneController pheromoneController;
+    public AntColony antColony;
 
-    public void Initialize(PheromoneState startState, UnitMovement movement)
+    public void Initialize(PheromoneState startState, AntColony antColony, MovementUnit movement, PheromoneController pheromoneController)
     {
         currentState = startState;
+        this.antColony = antColony;
         this.movement = movement;
+        this.pheromoneController = pheromoneController;
         startState.Enter(movement);
     }
 
