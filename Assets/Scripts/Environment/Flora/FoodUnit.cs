@@ -7,17 +7,45 @@ public class FoodUnit : MonoBehaviour
     public float nutrition;
     private List<MovementUnit> incomingAnts = new List<MovementUnit>();
 
+    public void Initialize(float nutrition)
+    {
+        this.nutrition = nutrition;
+        SetScaleFromNutrition();
+    }
+
     public void AssignIncomingAnt(MovementUnit newAnt)
     {
         incomingAnts.Add(newAnt);
     }
 
-    public void Pickup()
+    public float Pickup(float amount)
     {
-        foreach(MovementUnit movement in incomingAnts)
+        nutrition -= amount;
+
+        if(nutrition < 0)
         {
-            movement.target = null;
+            foreach(MovementUnit movement in incomingAnts)
+            {
+                movement.target = null;
+            }
+
+            Destroy(gameObject);
+            amount += nutrition;
         }
-        Destroy(gameObject);
+        SetScaleFromNutrition();
+
+        return amount;
+    }
+
+    private void SetScaleFromNutrition()
+    {
+        if (nutrition < 1)
+        {
+            transform.localScale = Vector3.one;
+        }
+        else
+        {
+            transform.localScale = Vector3.one + new Vector3(nutrition / 10f - 1, nutrition / 10f - 1, 0);
+        }
     }
 }

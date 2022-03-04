@@ -44,7 +44,7 @@ public class SearchingState : PheromoneState
         {
             if(movement.diff.sqrMagnitude < INTERACT_DISTANCE)
             {
-                EatFood();
+                PickupFood();
                 movement.transform.localRotation *= Quaternion.Euler(0, 0, 180);
                 psm.ChangeState(new ReturningState(psm));
             }
@@ -94,10 +94,10 @@ public class SearchingState : PheromoneState
         }
     }
 
-    private void EatFood()
+    private void PickupFood()
     {
         //Add nutrition
-        foodUnit.Pickup();
+        float pickedUpAmount = foodUnit.Pickup(1f);
     }
 
     public override void DetectTriggerCollision(Collider2D other)

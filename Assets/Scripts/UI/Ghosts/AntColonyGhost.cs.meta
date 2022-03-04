@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 671bbadda4b2a8a408c86f2e6cc7c921
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - antColonyPrefab: {fileID: 5112031259274006306, guid: 637af46f1a429e247bb08650e459a5e7, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

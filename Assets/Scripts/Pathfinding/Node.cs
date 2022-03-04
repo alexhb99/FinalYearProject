@@ -7,7 +7,7 @@ public class Node
     public Vector2Int pos;
     public Vector3 worldPosition;
     public List<Node> neighbours;
-    public TerrainType terrainType;
+    public TerrainArchetype terrainArchetype;
     public float walkSpeed;
     public bool walkable => walkSpeed > 0;
 
@@ -15,12 +15,12 @@ public class Node
     public int gCost;
     public int hCost;
 
-    public Node(Vector2Int pos, Vector3 worldPosition, TerrainType terrainType)
+    public Node(Vector2Int pos, Vector3 worldPosition, TerrainArchetype terrainArchetype)
     {
         this.pos = pos;
         this.worldPosition = worldPosition;
         this.parent = null;
-        this.terrainType = terrainType;
+        this.terrainArchetype = terrainArchetype;
     }
 
     public Node()

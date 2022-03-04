@@ -25,15 +25,15 @@ public class GridController : MonoBehaviour
         grid = new Node[size.x, size.y];
         gridStartPos = tilemap.transform.position;
 
-        TerrainType terrainType;
+        TerrainArchetype terrainArchetype;
 
         //Set nodes
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
             {
-                terrainType = terrainGenerator.terrain[x, y];
-                grid[x, y] = new Node(new Vector2Int(x, y), new Vector3(x + gridStartPos.x, y + gridStartPos.y), terrainType);
+                terrainArchetype = terrainGenerator.baseTerrain[x, y];
+                grid[x, y] = new Node(new Vector2Int(x, y), new Vector3(x + gridStartPos.x, y + gridStartPos.y), terrainArchetype);
             }
         }
 
@@ -57,11 +57,11 @@ public class GridController : MonoBehaviour
                         if(gridX < 0 || gridX >= size.x || gridY < 0 || gridY >= size.y) continue;
 
                         grid[x, y].neighbours.Add(grid[gridX, gridY]);
-                        totalWalkSpeed += grid[gridX, gridY].terrainType.walkSpeed;
+                        totalWalkSpeed += grid[gridX, gridY].terrainArchetype.walkSpeed;
                     }
                 }
 
-                grid[x, y].walkSpeed = grid[x, y].terrainType.walkSpeed == 0 ? 0 : totalWalkSpeed / grid[x, y].neighbours.Count;
+                grid[x, y].walkSpeed = grid[x, y].terrainArchetype.walkSpeed == 0 ? 0 : totalWalkSpeed / grid[x, y].neighbours.Count;
             }
         }
     }
@@ -71,8 +71,11 @@ public class GridController : MonoBehaviour
         float percentX = Mathf.Clamp01((point.x - gridStartPos.x) / size.x);
         float percentY = Mathf.Clamp01((point.y - gridStartPos.y) / size.y);
 
-        int x = Mathf.FloorToInt(size.x * percentX);
-        int y = Mathf.FloorToInt(size.y * percentY);
+        //int x = Mathf.FloorToInt(size.x * percentX);
+        //int y = Mathf.FloorToInt(size.y * percentY);
+
+        int x = Mathf.Clamp(Mathf.RoundToInt(point.x - gridStartPos.x), 0, size.x - 1);
+        int y = Mathf.Clamp(Mathf.RoundToInt(point.y - gridStartPos.y), 0, size.y - 1);
 
         return grid[x, y];
     }

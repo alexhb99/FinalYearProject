@@ -147,7 +147,7 @@ public class MovementUnit : MonoBehaviour
         }
 
         //Get terrain to sense
-        //List<TerrainType> sensedTiles = terrainGenerator.GetTerrainInBounds(obstacleSensorBounds).Where(x => x != null && x.walkSpeed == 0).ToList();
+        //List<TerrainArchetype> sensedTiles = terrainGenerator.GetTerrainInBounds(obstacleSensorBounds).Where(x => x != null && x.walkSpeed == 0).ToList();
 
         Vector3 closestObstacle = Vector3.positiveInfinity;
         obstacleDistance = Mathf.Infinity;
@@ -160,7 +160,7 @@ public class MovementUnit : MonoBehaviour
         //Go through each tile in sensed terrain
         foreach (Vector3Int pos in allPos)
         {
-            TerrainType tt = terrainGenerator.GetTileAtPos(pos);
+            TerrainArchetype tt = terrainGenerator.GetTileAtPos(pos);
 
             //Separate between left and right sensors
             if (Vector3.Cross(pos - transform.position, transform.up * offsetDistance * 2).z < 0)

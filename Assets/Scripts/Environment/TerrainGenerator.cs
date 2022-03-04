@@ -10,7 +10,7 @@ public class TerrainGenerator : MonoBehaviour
     private TerrainDatabase terrainDatabase;
 
     public Vector2Int size;
-    public TerrainType[,] terrain;
+    public TerrainArchetype[,] baseTerrain;
 
     public int seed;
     public bool randomSeed;
@@ -37,18 +37,18 @@ public class TerrainGenerator : MonoBehaviour
         terrainDatabase = GetComponent<TerrainDatabase>();
     }
 
-    public List<TerrainType> GetTerrainInBounds(BoundsInt bounds)
+    public List<TerrainArchetype> GetTerrainInBounds(BoundsInt bounds)
     {
         TileBase[] tileArray = tilemap.GetTilesBlock(bounds);
         List<TileBase> accTiles = new List<TileBase>();
-        List<TerrainType> tts = new List<TerrainType>();
+        List<TerrainArchetype> tts = new List<TerrainArchetype>();
 
         foreach (TileBase t in tileArray)
         {
             accTiles.Add(null);
             if (t != null)
             {
-                tts.Add(terrainDatabase.tileBaseToTerrainType[t]);
+                tts.Add(terrainDatabase.tileBaseToTerrainArchetype[t]);
             }
             else
             {
@@ -60,12 +60,12 @@ public class TerrainGenerator : MonoBehaviour
         return tts;
     }
 
-    public TerrainType GetTileAtPos(Vector3Int pos)
+    public TerrainArchetype GetTileAtPos(Vector3Int pos)
     {
         TileBase tileBase = tilemap.GetTile(pos);
         if(tileBase != null)
         {
-            return terrainDatabase.tileBaseToTerrainType[tileBase];
+            return terrainDatabase.tileBaseToTerrainArchetype[tileBase];
         }
         return null;
     }
@@ -76,7 +76,7 @@ public class TerrainGenerator : MonoBehaviour
 
         Vector3Int[] positions = new Vector3Int[size.x * size.y];
         TileBase[] tiles = new TileBase[size.x * size.y];
-        terrain = new TerrainType[size.x, size.y];
+        baseTerrain = new TerrainArchetype[size.x, size.y];
 
         for (int x = 0; x < size.x; x++)
         {
@@ -84,14 +84,14 @@ public class TerrainGenerator : MonoBehaviour
             {
                 positions[x * size.y + y] = new Vector3Int(x, y, 0);
 
-                foreach (TerrainType terrainType in terrainDatabase.terrainTypes)
+                foreach (TerrainArchetype terrainArchetype in terrainDatabase.terrainArchetypes)
                 {
-                    if(terrainType.height > heightmap[x, y])
+                    if(terrainArchetype.height > heightmap[x, y])
                     {
                         break;
                     }
-                    tiles[x * size.y + y] = terrainType.tile;
-                    terrain[x, y] = terrainType;
+                    tiles[x * size.y + y] = terrainArchetype.tile;
+                    baseTerrain[x, y] = terrainArchetype;
                 }                
             }
         }

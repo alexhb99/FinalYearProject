@@ -5,6 +5,9 @@ using UnityEngine.Tilemaps;
 
 public class FloraGenerator : MonoBehaviour
 {
+    private const float MaxNutrition = 40f;
+    private const float MinNutrition = 20f;
+
     public GameObject foodPrefab;
     public int foodCount;
     public int availableTilesPerFood;
@@ -40,7 +43,8 @@ public class FloraGenerator : MonoBehaviour
             Node space = availableSpaces[Random.Range(0, availableSpaces.Count)];
             Vector3 pos = space.worldPosition + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), 0);
 
-            Instantiate(foodPrefab, pos, Quaternion.identity, foodParent);
+            GameObject foodObject = Instantiate(foodPrefab, pos, Quaternion.identity, foodParent);
+            foodObject.GetComponent<FoodUnit>().Initialize(Random.Range(MinNutrition, MaxNutrition));
         }
     }
 

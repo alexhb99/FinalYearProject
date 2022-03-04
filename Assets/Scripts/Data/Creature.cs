@@ -7,6 +7,9 @@ public class Creature
 {
     public string name;
 
+    public float maxHunger;
+    public float maxSleep;
+
     //Movement details
         //Algorithm type, tile weights (do they swim/walk? mud/forest?),
         //default: speed, turn, acceleration...

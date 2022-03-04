@@ -6,26 +6,26 @@ using System.Linq;
 
 public class TerrainDatabase : MonoBehaviour
 {
-    public TerrainType[] terrainTypes;
+    public TerrainArchetype[] terrainArchetypes;
 
-    public Dictionary<TileBase, TerrainType> tileBaseToTerrainType = new Dictionary<TileBase, TerrainType>();
+    public Dictionary<TileBase, TerrainArchetype> tileBaseToTerrainArchetype = new Dictionary<TileBase, TerrainArchetype>();
 
     private void Start()
     {
-        terrainTypes = terrainTypes.OrderBy(x => x.height).ToArray();
+        terrainArchetypes = terrainArchetypes.OrderBy(x => x.height).ToArray();
 
-        foreach(TerrainType tt in terrainTypes)
+        foreach(TerrainArchetype ta in terrainArchetypes)
         {
-            if (!tileBaseToTerrainType.ContainsValue(tt))
+            if (!tileBaseToTerrainArchetype.ContainsValue(ta))
             {
-                tileBaseToTerrainType.Add(tt.tile, tt);
+                tileBaseToTerrainArchetype.Add(ta.tile, ta);
             }
         }
     }
 }
 
 [System.Serializable]
-public class TerrainType
+public class TerrainArchetype
 {
     public string name;
     public TileBase tile;
