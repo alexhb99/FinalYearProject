@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ReturningState : PheromoneState
 {
+    public static float startingPheromoneAmount = 100f;
+    public float returnPheromoneAmount;
+
     public ReturningState(PheromoneStateMachine psm) : base(psm)
     {
     }
@@ -11,6 +14,7 @@ public class ReturningState : PheromoneState
     public override void Enter(MovementUnit movement)
     {
         base.Enter(movement);
+        returnPheromoneAmount = startingPheromoneAmount;
     }
 
     public override void Exit()
@@ -24,10 +28,10 @@ public class ReturningState : PheromoneState
 
         Vector2 newRoundedPosition = new Vector2(Mathf.Round(movement.transform.position.x), Mathf.Round(movement.transform.position.y));
 
-        if (newRoundedPosition != roundedPosition)
+        if (newRoundedPosition != roundedPosition && returnPheromoneAmount > 0)
         {
             Pheromone currentPheromone = psm.pheromoneController.PheromoneFromPos(newRoundedPosition);
-            currentPheromone.IncrementToFoodIntensity();
+            returnPheromoneAmount -= currentPheromone.IncrementToFoodIntensity();
             roundedPosition = newRoundedPosition;
         }
     }
@@ -36,8 +40,11 @@ public class ReturningState : PheromoneState
     {
         base.MoveAnt();
 
-        movement.MoveAnt(SensePheromones() * 10f);
+        Vector3 sense = SensePheromones() * 10f;
+        //Debug.Log(movement.transform.position + " , " + sense + " , target: " + movement.target);
+        movement.MoveAnt(sense);
 
+        //If arrived at home...
         if (((Vector2)movement.transform.position - (Vector2)psm.antColony.transform.position).sqrMagnitude < INTERACT_DISTANCE)
         {
             movement.transform.localRotation *= Quaternion.Euler(0, 0, 180);
@@ -68,23 +75,28 @@ public class ReturningState : PheromoneState
             }
         }
 
+
         //Left
         if (sensorIntensities[0] > Mathf.Max(sensorIntensities[1], sensorIntensities[2]))
         {
-            return movement.transform.up - movement.transform.right * halfSampleSize.x;
+            //Debug.Log("LEFT : " + sensorIntensities[0] + " , " + sensorIntensities[1] + " , " + sensorIntensities[2]);
+            return -movement.transform.right * halfSampleSize.x;
         }
         //Right
         else if (sensorIntensities[2] > sensorIntensities[1])
         {
-            return movement.transform.up + movement.transform.right * halfSampleSize.x;
+            //Debug.Log("RIGHT : " + sensorIntensities[0] + " , " + sensorIntensities[1] + " , " + sensorIntensities[2]);
+            return movement.transform.right * halfSampleSize.x;
         }
         //Centre
         else if (sensorIntensities[1] > sensorIntensities[2])
         {
+            //Debug.Log("CENTRE : " + sensorIntensities[0] + " , " + sensorIntensities[1] + " , " + sensorIntensities[2]);
             return movement.transform.up;
         }
         else
         {
+            //Debug.Log("NONE : " + sensorIntensities[0] + " , " + sensorIntensities[1] + " , " + sensorIntensities[2]);
             return Vector3.zero;
         }
     }

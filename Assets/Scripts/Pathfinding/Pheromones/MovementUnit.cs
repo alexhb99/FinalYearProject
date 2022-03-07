@@ -7,7 +7,8 @@ public class MovementUnit : MonoBehaviour
 {
     public float moveSpeed;
     public float acceleration;
-    public float turnSpeed;
+    public float randomTurnSpeed;
+    public float targetTurnSpeed;
     public float turnDeviation;
     public bool drawGizmos;
 
@@ -62,7 +63,7 @@ public class MovementUnit : MonoBehaviour
 
         float angle = Mathf.Atan2(desiredDirection.y, desiredDirection.x) * Mathf.Rad2Deg - 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, turnSpeed);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, randomTurnSpeed);
 
         float targetSpeed = Mathf.Max(0, moveSpeed * (obstacleDistance < 4f ? (obstacleDistance - 1) / 4f : 1));
         currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * acceleration);
@@ -75,7 +76,7 @@ public class MovementUnit : MonoBehaviour
 
         float angle = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg - 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, turnSpeed);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, targetTurnSpeed);
 
         currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, Time.deltaTime * acceleration);
         transform.position += currentSpeed * Time.deltaTime * transform.up;

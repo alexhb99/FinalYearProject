@@ -6,6 +6,9 @@ public class SearchingState : PheromoneState
 {
     FoodUnit foodUnit;
 
+    public static float startingPheromoneAmount = 100f;
+    public float searchPheromoneAmount;
+
     public SearchingState(PheromoneStateMachine psm) : base(psm)
     {
     }
@@ -13,6 +16,7 @@ public class SearchingState : PheromoneState
     public override void Enter(MovementUnit movement)
     {
         base.Enter(movement);
+        searchPheromoneAmount = startingPheromoneAmount;
     }
 
     public override void Exit()
@@ -26,10 +30,10 @@ public class SearchingState : PheromoneState
 
         Vector2 newRoundedPosition = new Vector2(Mathf.Round(movement.transform.position.x), Mathf.Round(movement.transform.position.y));
 
-        if(newRoundedPosition != roundedPosition)
+        if(newRoundedPosition != roundedPosition && searchPheromoneAmount > 0)
         {
             Pheromone currentPheromone = psm.pheromoneController.PheromoneFromPos(newRoundedPosition);
-            currentPheromone.IncrementToHomeIntensity();
+            searchPheromoneAmount -= currentPheromone.IncrementToHomeIntensity();
             roundedPosition = newRoundedPosition;
         }
     }
@@ -98,6 +102,7 @@ public class SearchingState : PheromoneState
     {
         //Add nutrition
         float pickedUpAmount = foodUnit.Pickup(1f);
+        movement.target = null;
     }
 
     public override void DetectTriggerCollision(Collider2D other)

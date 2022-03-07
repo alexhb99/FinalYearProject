@@ -16,7 +16,6 @@ public abstract class PheromoneState
     public MovementUnit movement;
 
     public Vector2 roundedPosition;
-    public List<Vector3>[] samples;
 
     public PheromoneState(PheromoneStateMachine psm)
     {
@@ -29,6 +28,7 @@ public abstract class PheromoneState
     public virtual void Enter(MovementUnit movement)
     {
         this.movement = movement;
+        movement.target = null;
         roundedPosition = new Vector2(Mathf.Round(movement.transform.position.x), Mathf.Round(movement.transform.position.y));
     }
     public virtual void Exit() { }

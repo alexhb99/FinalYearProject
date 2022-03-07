@@ -19,21 +19,25 @@ public class Pheromone
         toHomeIntensity = 0;
     }
 
-    public void IncrementToFoodIntensity()
+    public float IncrementToFoodIntensity()
     {
+        float originalIntensity = toFoodIntensity;
         toFoodIntensity++;
         if (toFoodIntensity > MaxIntensity) toFoodIntensity = MaxIntensity;
+        return toFoodIntensity - originalIntensity;
     }
-    public void IncrementToHomeIntensity()
+    public float IncrementToHomeIntensity()
     {
+        float originalIntensity = toHomeIntensity;
         toHomeIntensity++;
         if (toHomeIntensity > MaxIntensity) toHomeIntensity = MaxIntensity;
+        return toHomeIntensity - originalIntensity;
     }
 
     public void ReduceIntensities()
     {
-        toFoodIntensity = Mathf.Lerp(toFoodIntensity, 0, Time.deltaTime * DissipateSpeed);
-        toHomeIntensity = Mathf.Lerp(toHomeIntensity, 0, Time.deltaTime * DissipateSpeed);
+        toFoodIntensity -= Time.deltaTime * DissipateSpeed; //Mathf.Lerp(toFoodIntensity, 0, Time.deltaTime * DissipateSpeed);
+        toHomeIntensity -= Time.deltaTime * DissipateSpeed; //Mathf.Lerp(toHomeIntensity, 0, Time.deltaTime * DissipateSpeed);
 
         if (toFoodIntensity < MinIntensity) toFoodIntensity = 0;
         if (toHomeIntensity < MinIntensity) toHomeIntensity = 0;

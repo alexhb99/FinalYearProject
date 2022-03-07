@@ -15,6 +15,7 @@ public class PheromoneStateMachine
         this.antColony = antColony;
         this.movement = movement;
         this.pheromoneController = pheromoneController;
+
         startState.Enter(movement);
     }
 
