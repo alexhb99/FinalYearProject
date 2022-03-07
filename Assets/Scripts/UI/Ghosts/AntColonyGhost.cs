@@ -14,12 +14,17 @@ public class AntColonyGhost : MonoBehaviour
     private Color positiveColour = new Color(0.117f, 1f, 0f, 0.7843137f);
     private Color negativeColour = new Color(0.752f, 0.213f, 0.1366809f, 0.7843137f);
 
+    IntSliderInput numOfAnts;
+
     private void Start()
     {
         canPlace = false;
         spriteRenderer = GetComponent<SpriteRenderer>();
         gridController = GameObject.FindWithTag("Pathfinding").GetComponent<GridController>();
         creatureParent = GameObject.FindWithTag("Creatures").transform;
+
+        UIController ui = GameObject.FindWithTag("SimulationController").GetComponent<UIController>();
+        numOfAnts = ui.antColonyCreator.transform.GetChild(2).GetComponent<IntSliderInput>();
     }
 
     private void Update()
@@ -50,7 +55,8 @@ public class AntColonyGhost : MonoBehaviour
     {
         if (canPlace)
         {
-            Instantiate(antColonyPrefab, (Vector2)transform.position, Quaternion.identity, creatureParent);
+            GameObject instance = Instantiate(antColonyPrefab, (Vector2)transform.position, Quaternion.identity, creatureParent);
+            instance.GetComponent<AntColony>().CreateAnts((int)numOfAnts.slider.value);
         }
         Destroy(gameObject);
     }

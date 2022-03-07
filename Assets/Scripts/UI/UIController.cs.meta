@@ -3,7 +3,11 @@ guid: 00cfa0b8bb2c68842a5106ebfe63c548
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - antColonyGhost: {fileID: 5112031259274006306, guid: 7f147d4bba7e6bb44869db3a2b7ad014, type: 3}
+  - foodSourceGhost: {fileID: 4627032236299317153, guid: e4e0270287f690c489632a9652213d3f, type: 3}
+  - antColonyCreator: {instanceID: 0}
+  - foodSourceCreator: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -4,19 +4,14 @@ using UnityEngine;
 
 public class AntColony : MonoBehaviour
 {
-    private const int MinAnts = 50;
-    private const int MaxAnts = 75;
-
     public GameObject antPrefab;
 
     private List<GameObject> antObjects;
 
-    private void Start()
+    public void CreateAnts(int amount)
     {
         antObjects = new List<GameObject>();
-
-        int numAnts = Random.Range(MinAnts, MaxAnts + 1);
-        for(int i = 0; i < numAnts; i++)
+        for (int i = 0; i < amount; i++)
         {
             SpawnAnt();
         }

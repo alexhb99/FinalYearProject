@@ -14,12 +14,17 @@ public class FoodSourceGhost : MonoBehaviour
     private Color positiveColour = new Color(0.117f, 1f, 0f, 0.7843137f);
     private Color negativeColour = new Color(0.752f, 0.213f, 0.1366809f, 0.7843137f);
 
+    IntSliderInput nutrition;
+
     private void Start()
     {
         canPlace = false;
         spriteRenderer = GetComponent<SpriteRenderer>();
         gridController = GameObject.FindWithTag("Pathfinding").GetComponent<GridController>();
         foodParent = GameObject.FindWithTag("FoodParent").transform;
+
+        UIController ui = GameObject.FindWithTag("SimulationController").GetComponent<UIController>();
+        nutrition = ui.foodSourceCreator.transform.GetChild(2).GetComponent<IntSliderInput>();
     }
 
     private void Update()
@@ -50,7 +55,8 @@ public class FoodSourceGhost : MonoBehaviour
     {
         if (canPlace)
         {
-            Instantiate(prefab, (Vector2)transform.position, Quaternion.identity, foodParent);
+            GameObject instance = Instantiate(prefab, (Vector2)transform.position, Quaternion.identity, foodParent);
+            instance.GetComponent<FoodUnit>().Initialize((int)nutrition.slider.value);
         }
         Destroy(gameObject);
     }
