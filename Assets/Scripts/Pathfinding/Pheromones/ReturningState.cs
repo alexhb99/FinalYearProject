@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ReturningState : PheromoneState
 {
-    public static float startingPheromoneAmount = 100f;
     public float returnPheromoneAmount;
 
     public ReturningState(PheromoneStateMachine psm) : base(psm)
@@ -14,7 +13,7 @@ public class ReturningState : PheromoneState
     public override void Enter(MovementUnit movement)
     {
         base.Enter(movement);
-        returnPheromoneAmount = startingPheromoneAmount;
+        returnPheromoneAmount = psm.pheromoneController.returnPheromoneCapacity;
     }
 
     public override void Exit()
@@ -31,7 +30,7 @@ public class ReturningState : PheromoneState
         if (newRoundedPosition != roundedPosition && returnPheromoneAmount > 0)
         {
             Pheromone currentPheromone = psm.pheromoneController.PheromoneFromPos(newRoundedPosition);
-            returnPheromoneAmount -= currentPheromone.IncrementToFoodIntensity();
+            returnPheromoneAmount -= currentPheromone.IncrementToFoodIntensity(psm.pheromoneController.maxIntensity);
             roundedPosition = newRoundedPosition;
         }
     }

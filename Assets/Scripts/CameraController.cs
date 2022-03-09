@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         cam = Camera.main;
+        targetSize = 20f;
     }
 
     private void FixedUpdate()

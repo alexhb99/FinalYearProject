@@ -14,7 +14,11 @@ public class AntColonyGhost : MonoBehaviour
     private Color positiveColour = new Color(0.117f, 1f, 0f, 0.7843137f);
     private Color negativeColour = new Color(0.752f, 0.213f, 0.1366809f, 0.7843137f);
 
-    IntSliderInput numOfAnts;
+    private IntSliderInput numOfAnts;
+    private FloatSliderInput pheromoneDissipateSpeed;
+    private FloatSliderInput pheromoneMaxIntensity;
+    private FloatSliderInput searchPheromoneCapacity;
+    private FloatSliderInput returnPheromoneCapacity;
 
     private void Start()
     {
@@ -24,7 +28,11 @@ public class AntColonyGhost : MonoBehaviour
         creatureParent = GameObject.FindWithTag("Creatures").transform;
 
         UIController ui = GameObject.FindWithTag("SimulationController").GetComponent<UIController>();
-        numOfAnts = ui.antColonyCreator.transform.GetChild(2).GetComponent<IntSliderInput>();
+        numOfAnts = ui.antColonyCreator.transform.GetChild(2).GetChild(0).GetComponent<IntSliderInput>();
+        pheromoneDissipateSpeed = ui.antColonyCreator.transform.GetChild(2).GetChild(1).GetComponent<FloatSliderInput>();
+        pheromoneMaxIntensity = ui.antColonyCreator.transform.GetChild(2).GetChild(2).GetComponent<FloatSliderInput>();
+        searchPheromoneCapacity = ui.antColonyCreator.transform.GetChild(2).GetChild(3).GetComponent<FloatSliderInput>();
+        returnPheromoneCapacity = ui.antColonyCreator.transform.GetChild(2).GetChild(4).GetComponent<FloatSliderInput>();
     }
 
     private void Update()
@@ -56,7 +64,7 @@ public class AntColonyGhost : MonoBehaviour
         if (canPlace)
         {
             GameObject instance = Instantiate(antColonyPrefab, (Vector2)transform.position, Quaternion.identity, creatureParent);
-            instance.GetComponent<AntColony>().CreateAnts((int)numOfAnts.slider.value);
+            instance.GetComponent<AntColony>().CreateAnts((int)numOfAnts.slider.value, pheromoneDissipateSpeed.slider.value, pheromoneMaxIntensity.slider.value, searchPheromoneCapacity.slider.value, returnPheromoneCapacity.slider.value);
         }
         Destroy(gameObject);
     }

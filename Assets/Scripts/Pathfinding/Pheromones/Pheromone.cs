@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Pheromone
 {
-    private const float DissipateSpeed = 0.25f;
     private const float MinIntensity = 0.01f;
-    private const float MaxIntensity = 10f;
 
     public Vector3 pos;
     public float toFoodIntensity;
@@ -19,25 +17,25 @@ public class Pheromone
         toHomeIntensity = 0;
     }
 
-    public float IncrementToFoodIntensity()
+    public float IncrementToFoodIntensity(float maxIntensity)
     {
         float originalIntensity = toFoodIntensity;
         toFoodIntensity++;
-        if (toFoodIntensity > MaxIntensity) toFoodIntensity = MaxIntensity;
+        if (toFoodIntensity > maxIntensity) toFoodIntensity = maxIntensity;
         return toFoodIntensity - originalIntensity;
     }
-    public float IncrementToHomeIntensity()
+    public float IncrementToHomeIntensity(float maxIntensity)
     {
         float originalIntensity = toHomeIntensity;
         toHomeIntensity++;
-        if (toHomeIntensity > MaxIntensity) toHomeIntensity = MaxIntensity;
+        if (toHomeIntensity > maxIntensity) toHomeIntensity = maxIntensity;
         return toHomeIntensity - originalIntensity;
     }
 
-    public void ReduceIntensities()
+    public void ReduceIntensities(float dissipateSpeed)
     {
-        toFoodIntensity -= Time.deltaTime * DissipateSpeed; //Mathf.Lerp(toFoodIntensity, 0, Time.deltaTime * DissipateSpeed);
-        toHomeIntensity -= Time.deltaTime * DissipateSpeed; //Mathf.Lerp(toHomeIntensity, 0, Time.deltaTime * DissipateSpeed);
+        toFoodIntensity -= Time.deltaTime * dissipateSpeed; //Mathf.Lerp(toFoodIntensity, 0, Time.deltaTime * DissipateSpeed);
+        toHomeIntensity -= Time.deltaTime * dissipateSpeed; //Mathf.Lerp(toHomeIntensity, 0, Time.deltaTime * DissipateSpeed);
 
         if (toFoodIntensity < MinIntensity) toFoodIntensity = 0;
         if (toHomeIntensity < MinIntensity) toHomeIntensity = 0;

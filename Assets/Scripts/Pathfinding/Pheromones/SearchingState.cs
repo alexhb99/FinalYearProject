@@ -6,7 +6,6 @@ public class SearchingState : PheromoneState
 {
     FoodUnit foodUnit;
 
-    public static float startingPheromoneAmount = 100f;
     public float searchPheromoneAmount;
 
     public SearchingState(PheromoneStateMachine psm) : base(psm)
@@ -16,7 +15,7 @@ public class SearchingState : PheromoneState
     public override void Enter(MovementUnit movement)
     {
         base.Enter(movement);
-        searchPheromoneAmount = startingPheromoneAmount;
+        searchPheromoneAmount = psm.pheromoneController.searchPheromoneCapacity;
     }
 
     public override void Exit()
@@ -33,7 +32,7 @@ public class SearchingState : PheromoneState
         if(newRoundedPosition != roundedPosition && searchPheromoneAmount > 0)
         {
             Pheromone currentPheromone = psm.pheromoneController.PheromoneFromPos(newRoundedPosition);
-            searchPheromoneAmount -= currentPheromone.IncrementToHomeIntensity();
+            searchPheromoneAmount -= currentPheromone.IncrementToHomeIntensity(psm.pheromoneController.maxIntensity);
             roundedPosition = newRoundedPosition;
         }
     }

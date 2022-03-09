@@ -25,6 +25,16 @@ public class FoodSourceGhost : MonoBehaviour
 
         UIController ui = GameObject.FindWithTag("SimulationController").GetComponent<UIController>();
         nutrition = ui.foodSourceCreator.transform.GetChild(2).GetComponent<IntSliderInput>();
+
+        if (nutrition.slider.value < 1)
+        {
+            transform.localScale = Vector3.one;
+        }
+        else
+        {
+            Vector3 scalar = new Vector3(Mathf.Min(10f, nutrition.slider.value / 10f - 1), Mathf.Min(10f, nutrition.slider.value / 10f - 1), 0);
+            transform.localScale = Vector3.one + scalar;
+        }
     }
 
     private void Update()

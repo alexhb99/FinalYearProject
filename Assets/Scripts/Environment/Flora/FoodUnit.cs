@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class FoodUnit : MonoBehaviour
 {
+    private float originalNutrition;
+    Vector3 originalScale;
     public float nutrition;
     private List<MovementUnit> incomingAnts = new List<MovementUnit>();
 
     public void Initialize(float nutrition)
     {
         this.nutrition = nutrition;
+        originalNutrition = nutrition;
+        originalScale = Vector3.one + new Vector3(Mathf.Min(10f, originalNutrition / 10f - 1), Mathf.Min(10f, originalNutrition / 10f - 1), 0);
         SetScaleFromNutrition();
     }
 
@@ -45,7 +49,7 @@ public class FoodUnit : MonoBehaviour
         }
         else
         {
-            transform.localScale = Vector3.one + new Vector3(nutrition / 10f - 1, nutrition / 10f - 1, 0);
+            transform.localScale = Vector3.one + new Vector3(originalScale.x * nutrition / originalNutrition, originalScale.y * nutrition / originalNutrition, 1);
         }
     }
 }

@@ -12,16 +12,27 @@ public class PheromoneController : MonoBehaviour
     [HideInInspector]
     public Dictionary<Vector2, Pheromone> posToPheromone = new Dictionary<Vector2, Pheromone>();
 
-    private void Start()
+    public float dissipateSpeed;
+    public float maxIntensity;
+    public float searchPheromoneCapacity;
+    public float returnPheromoneCapacity;
+
+    public void Initialize(float pheromoneDissipateSpeed, float pheromoneMaxIntensity, float searchPheromoneCapacity, float returnPheromoneCapacity)
     {
         gridController = GameObject.FindWithTag("Pathfinding").GetComponent<GridController>();
+        dissipateSpeed = pheromoneDissipateSpeed;
+        maxIntensity = pheromoneMaxIntensity;
+        this.searchPheromoneCapacity = searchPheromoneCapacity;
+        this.returnPheromoneCapacity = returnPheromoneCapacity;
+
+        GeneratePheromoneGrid();
     }
 
     private void Update()
     {
         foreach(Pheromone p in pheromones)
         {
-            p.ReduceIntensities();
+            p.ReduceIntensities(dissipateSpeed);
         }
     }
 
@@ -60,7 +71,9 @@ public class PheromoneController : MonoBehaviour
         {
             for (int y = 0; y < gridController.grid.GetLength(1); y++)
             {
-                pheromones.Add(new Pheromone(gridController.grid[x, y].worldPosition));
+                Pheromone newPheromone = new Pheromone(gridController.grid[x, y].worldPosition);
+                pheromones.Add(newPheromone);
+                posToPheromone.Add(new Vector2(x, y), newPheromone);
             }
         }
     }

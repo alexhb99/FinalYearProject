@@ -9,12 +9,12 @@ public class PheromoneUnit : MonoBehaviour
     public ReturningState returning;
 
     private MovementUnit movement;
-    private PheromoneController pheromoneController;
 
-    public void StartPheromone(AntColony antColony)
+    public bool drawGizmos;
+
+    public void StartPheromone(AntColony antColony, PheromoneController pheromoneController)
     {
         movement = GetComponent<MovementUnit>();
-        pheromoneController = GameObject.FindWithTag("SimulationController").GetComponent<PheromoneController>();
 
         stateMachine = new PheromoneStateMachine();
 
@@ -37,19 +37,22 @@ public class PheromoneUnit : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(transform.position, -transform.right * (stateMachine.currentState.halfSampleSize.x / 2f) + transform.up);
-        Gizmos.DrawRay(transform.position, transform.right * (stateMachine.currentState.halfSampleSize.x / 2f) + transform.up);
-
-        Vector3 pos = transform.position + transform.up - transform.right * stateMachine.currentState.halfSampleSize.x;
-        Gizmos.color = Color.white;
-        Gizmos.DrawLine(pos, pos + transform.right * 2);
-
-        for(int i = 0; i < 3; i++)
+        if (drawGizmos)
         {
-            Vector3 sampledPosition = pos + transform.right * i;
-            sampledPosition = new Vector3(Mathf.Round(sampledPosition.x), Mathf.Round(sampledPosition.y), 0);
-            Gizmos.DrawCube(sampledPosition, Vector3.one * 0.5f);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(transform.position, -transform.right * (stateMachine.currentState.halfSampleSize.x / 2f) + transform.up);
+            Gizmos.DrawRay(transform.position, transform.right * (stateMachine.currentState.halfSampleSize.x / 2f) + transform.up);
+
+            Vector3 pos = transform.position + transform.up - transform.right * stateMachine.currentState.halfSampleSize.x;
+            Gizmos.color = Color.white;
+            Gizmos.DrawLine(pos, pos + transform.right * 2);
+
+            for(int i = 0; i < 3; i++)
+            {
+                Vector3 sampledPosition = pos + transform.right * i;
+                sampledPosition = new Vector3(Mathf.Round(sampledPosition.x), Mathf.Round(sampledPosition.y), 0);
+                Gizmos.DrawCube(sampledPosition, Vector3.one * 0.5f);
+            }
         }
     }
 }

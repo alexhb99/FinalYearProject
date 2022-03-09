@@ -8,7 +8,7 @@ public class MovementUnit : MonoBehaviour
     public float moveSpeed;
     public float acceleration;
     public float randomTurnSpeed;
-    public float targetTurnSpeed;
+    private float targetTurnSpeed;
     public float turnDeviation;
     public bool drawGizmos;
 
@@ -33,6 +33,7 @@ public class MovementUnit : MonoBehaviour
 
     private void Start()
     {
+        targetTurnSpeed = randomTurnSpeed * 2;
         size = new Vector3Int(3, 3, 1);
         halfSize = new Vector3Int(size.x / 2, size.y / 2, 0);
         offsetDistance = halfSize.magnitude + 1;

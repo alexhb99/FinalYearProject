@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class IntSliderInput : MonoBehaviour
+public class FloatSliderInput : MonoBehaviour
 {
     public string defaultMin;
     public string defaultVal;
     public string defaultMax;
 
-    public int absoluteMin;
-    public int absoluteMax;
+    public float absoluteMin;
+    public float absoluteMax;
 
     TMP_InputField minInput;
     TMP_InputField valInput;
@@ -29,34 +29,33 @@ public class IntSliderInput : MonoBehaviour
         valInput.text = defaultVal;
         minInput.text = defaultMin;
         maxInput.text = defaultMax;
-        slider.maxValue = int.Parse(defaultMax);
-        slider.minValue = int.Parse(defaultMin);
-        slider.value = int.Parse(defaultVal);
+        slider.maxValue = float.Parse(defaultMax);
+        slider.minValue = float.Parse(defaultMin);
+        slider.value = float.Parse(defaultVal);
     }
 
     public void UpdateSliderMin(string strValue)
     {
-        int val = (int)Mathf.Max(absoluteMin, Mathf.Min(slider.maxValue, int.Parse(strValue)));
-        minInput.text = val.ToString();
+        float val = Mathf.Max(absoluteMin, Mathf.Min(slider.maxValue, float.Parse(strValue)));
+        minInput.text = val.ToString("F2");
         slider.minValue = val;
         valInput.onValueChanged.Invoke(valInput.text);
     }
     public void UpdateSliderValue(string strValue)
     {
-        int val = int.Parse(strValue);
+        float val = float.Parse(strValue);
         slider.value = Mathf.Min(slider.maxValue, Mathf.Max(slider.minValue, val));
-        valInput.text = slider.value.ToString();
+        valInput.text = slider.value.ToString("F2");
     }
     public void UpdateSliderMax(string strValue)
     {
-        int val = (int)Mathf.Min(absoluteMax, Mathf.Max(slider.minValue, int.Parse(strValue)));
-        maxInput.text = val.ToString();
+        float val = Mathf.Min(absoluteMax, Mathf.Max(slider.minValue, float.Parse(strValue)));
+        maxInput.text = val.ToString("F2");
         slider.maxValue = val;
         valInput.onValueChanged.Invoke(valInput.text);
     }
-    public void UpdateFromSlider(float floatVal)
+    public void UpdateFromSlider(float val)
     {
-        int val = Mathf.RoundToInt(floatVal);
-        valInput.text = val.ToString();
+        valInput.text = val.ToString("F2");
     }
 }

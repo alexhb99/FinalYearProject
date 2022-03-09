@@ -33,7 +33,7 @@ public class SimulationController : MonoBehaviour
 
         terrainGenerator.GenerateTerrain();
         floraGenerator.GenerateFlora();
-        pheromoneController.GeneratePheromoneGrid();
+
         for (int i = 0; i < antCount; i++)
         {
             SpawnAnt();
