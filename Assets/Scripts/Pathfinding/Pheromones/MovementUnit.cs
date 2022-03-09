@@ -31,8 +31,13 @@ public class MovementUnit : MonoBehaviour
     [HideInInspector]
     public Vector3 diff;
 
-    private void Start()
+    public void Initialize(float antMaxSpeed, float antAcceleration, float antTurnSpeed, float antRandomRotation)
     {
+        moveSpeed = antMaxSpeed;
+        acceleration = antAcceleration;
+        randomTurnSpeed = antTurnSpeed;
+        turnDeviation = antRandomRotation;
+
         targetTurnSpeed = randomTurnSpeed * 2;
         size = new Vector3Int(3, 3, 1);
         halfSize = new Vector3Int(size.x / 2, size.y / 2, 0);

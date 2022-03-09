@@ -9,7 +9,8 @@ public class AntColony : MonoBehaviour
     private List<GameObject> antObjects;
     private PheromoneController pheromoneController;
 
-    public void CreateAnts(int amount, float pheromoneDissipateSpeed, float pheromoneMaxIntensity, float searchPheromoneCapacity, float returnPheromoneCapacity)
+    public void CreateAnts(int amount, float pheromoneDissipateSpeed, float pheromoneMaxIntensity, float searchPheromoneCapacity, float returnPheromoneCapacity,
+        float antMaxSpeed, float antAcceleration, float antTurnSpeed, float antRandomRotation)
     {
         pheromoneController = GetComponent<PheromoneController>();
         pheromoneController.Initialize(pheromoneDissipateSpeed, pheromoneMaxIntensity, searchPheromoneCapacity, returnPheromoneCapacity);
@@ -17,15 +18,15 @@ public class AntColony : MonoBehaviour
         antObjects = new List<GameObject>();
         for (int i = 0; i < amount; i++)
         {
-            SpawnAnt();
+            SpawnAnt(antMaxSpeed, antAcceleration, antTurnSpeed, antRandomRotation);
         }
     }
 
-    private void SpawnAnt()
+    private void SpawnAnt(float antMaxSpeed, float antAcceleration, float antTurnSpeed, float antRandomRotation)
     {
         GameObject newAnt = Instantiate(antPrefab, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360))), transform.GetChild(0));
         newAnt.GetComponent<PheromoneUnit>().StartPheromone(this, pheromoneController);
-        
+        newAnt.GetComponent<MovementUnit>().Initialize(antMaxSpeed, antAcceleration, antTurnSpeed, antRandomRotation);
         antObjects.Add(newAnt);
     }
 }

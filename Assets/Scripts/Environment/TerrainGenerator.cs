@@ -84,6 +84,13 @@ public class TerrainGenerator : MonoBehaviour
             {
                 positions[x * size.y + y] = new Vector3Int(x, y, 0);
 
+                if(x == 0 || y == 0 || x == size.x - 1 || y == size.y - 1)
+                {
+                    tiles[x * size.y + y] = terrainDatabase.unwalkableTerrain.tile;
+                    baseTerrain[x, y] = terrainDatabase.unwalkableTerrain;
+                    continue;
+                }
+
                 foreach (TerrainArchetype terrainArchetype in terrainDatabase.terrainArchetypes)
                 {
                     if(terrainArchetype.height > heightmap[x, y])
