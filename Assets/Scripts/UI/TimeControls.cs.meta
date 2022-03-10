@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: c593e68e7da7f2a40833ba1b3115402e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - pausedIcon: {fileID: 21300000, guid: 78ded9ab78181ee4a95ae6376d535d38, type: 3}
+  - playIcon: {fileID: 21300000, guid: e6bbcd84d27026c4e811d994f00cc50c, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -81,13 +81,13 @@ public class PheromoneController : MonoBehaviour
     public Pheromone PheromoneFromPos(Vector3 pos3)
     {
         Vector2 pos = new Vector2(Mathf.Round(pos3.x), Mathf.Round(pos3.y));
-        try
+        if(pos.x > 0 && pos.y > 0 && pos.x < gridController.size.x - 1 && pos.y < gridController.size.y - 1)
         {
             return posToPheromone[pos];
         }
-        catch
+        else
         {
-            return FindPheromoneInList(pos);
+            return null;
         }
     }
 

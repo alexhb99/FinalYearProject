@@ -59,11 +59,6 @@ public class SimulationController : MonoBehaviour
             StartSimulation();
         }
 
-        if (Input.GetKey(KeyCode.X))
-        {
-            SpawnAnt();
-        }
-
         if (Input.GetKeyDown(KeyCode.C))
         {
             SpawnAntColony();
@@ -101,6 +96,7 @@ public class SimulationController : MonoBehaviour
             }
         }
 
-        Instantiate(antColony, new Vector3(gridController.gridStartPos.x + randX, gridController.gridStartPos.y + randY, 0), Quaternion.identity, creatureParent);
+        GameObject instance = Instantiate(antColony, new Vector3(gridController.gridStartPos.x + randX, gridController.gridStartPos.y + randY, 0), Quaternion.identity, creatureParent);
+        instance.GetComponent<AntColony>().CreateAnts(50, 0.25f, 10f, 100f, 100f, 5f, 5f, 6f, 0.2f);
     }
 }

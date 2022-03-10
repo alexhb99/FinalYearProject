@@ -34,8 +34,8 @@ public class Pheromone
 
     public void ReduceIntensities(float dissipateSpeed)
     {
-        toFoodIntensity -= Time.deltaTime * dissipateSpeed; //Mathf.Lerp(toFoodIntensity, 0, Time.deltaTime * DissipateSpeed);
-        toHomeIntensity -= Time.deltaTime * dissipateSpeed; //Mathf.Lerp(toHomeIntensity, 0, Time.deltaTime * DissipateSpeed);
+        toFoodIntensity -= Time.deltaTime * TimeControls.timeScale * dissipateSpeed; //Mathf.Lerp(toFoodIntensity, 0, Time.deltaTime * DissipateSpeed);
+        toHomeIntensity -= Time.deltaTime * TimeControls.timeScale * dissipateSpeed; //Mathf.Lerp(toHomeIntensity, 0, Time.deltaTime * DissipateSpeed);
 
         if (toFoodIntensity < MinIntensity) toFoodIntensity = 0;
         if (toHomeIntensity < MinIntensity) toHomeIntensity = 0;

@@ -32,8 +32,11 @@ public class SearchingState : PheromoneState
         if(newRoundedPosition != roundedPosition && searchPheromoneAmount > 0)
         {
             Pheromone currentPheromone = psm.pheromoneController.PheromoneFromPos(newRoundedPosition);
-            searchPheromoneAmount -= currentPheromone.IncrementToHomeIntensity(psm.pheromoneController.maxIntensity);
-            roundedPosition = newRoundedPosition;
+            if (currentPheromone != null)
+            {
+                searchPheromoneAmount -= currentPheromone.IncrementToHomeIntensity(psm.pheromoneController.maxIntensity);
+                roundedPosition = newRoundedPosition;
+            }
         }
     }
 
@@ -71,7 +74,11 @@ public class SearchingState : PheromoneState
             {
                 for (int y = -1; y <= 1; y++)
                 {
-                    sensorIntensities[i] += psm.pheromoneController.PheromoneFromPos(sampledPosition + new Vector3(x, y, 0)).toFoodIntensity;
+                    Pheromone pheromone = psm.pheromoneController.PheromoneFromPos(sampledPosition + new Vector3(x, y, 0));
+                    if(pheromone != null)
+                    {
+                        sensorIntensities[i] += pheromone.toFoodIntensity;
+                    }
                 }
             }
         }

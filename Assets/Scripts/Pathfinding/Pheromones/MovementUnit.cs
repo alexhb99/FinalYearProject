@@ -69,11 +69,13 @@ public class MovementUnit : MonoBehaviour
 
         float angle = Mathf.Atan2(desiredDirection.y, desiredDirection.x) * Mathf.Rad2Deg - 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, randomTurnSpeed);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, randomTurnSpeed * TimeControls.timeScale);
 
-        float targetSpeed = Mathf.Max(0, moveSpeed * (obstacleDistance < 4f ? (obstacleDistance - 1) / 4f : 1));
-        currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * acceleration);
-        transform.position += currentSpeed * Time.deltaTime * transform.up;
+        //Slow down when close to wall!
+        float obstacleDistanceScalar = (obstacleDistance < 4f ? Mathf.Max(0.00001f, ((obstacleDistance - 1) / 4f) - 0.25f) : 1);
+        float targetSpeed = Mathf.Max(0, moveSpeed * obstacleDistanceScalar);
+        currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * TimeControls.timeScale * acceleration * 1 / obstacleDistanceScalar);
+        transform.position += currentSpeed * Time.deltaTime * TimeControls.timeScale * transform.up;
     }
 
     private void WalkToTarget()
@@ -82,10 +84,10 @@ public class MovementUnit : MonoBehaviour
 
         float angle = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg - 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, targetTurnSpeed);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, targetTurnSpeed * TimeControls.timeScale);
 
-        currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, Time.deltaTime * acceleration);
-        transform.position += currentSpeed * Time.deltaTime * transform.up;
+        currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, Time.deltaTime * TimeControls.timeScale * acceleration);
+        transform.position += currentSpeed * Time.deltaTime * TimeControls.timeScale * transform.up;
     }
 
     public void GetTargetDistance()
@@ -138,19 +140,19 @@ public class MovementUnit : MonoBehaviour
         //Avoid borders
         if(transform.position.x < terrainGenerator.terrainBounds.min.x + 1)
         {
-            normal += Vector3.right;
+            normal += Vector3.right * 100;
         }
         else if (transform.position.x > terrainGenerator.terrainBounds.max.x - 2)
         {
-            normal += Vector3.left;
+            normal += Vector3.left * 100;
         }
         if (transform.position.y < terrainGenerator.terrainBounds.min.y + 1)
         {
-            normal += Vector3.up;
+            normal += Vector3.up * 100;
         }
         else if (transform.position.y > terrainGenerator.terrainBounds.max.y - 2)
         {
-            normal += Vector3.down;
+            normal += Vector3.down * 100;
         }
 
         //Get terrain to sense

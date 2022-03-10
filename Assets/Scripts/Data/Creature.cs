@@ -8,7 +8,14 @@ public class Creature
     public string name;
 
     public float maxHunger;
+    public float hungerRate;
+    public float maxThirst;
+    public float thirstRate;
+    public bool needThirst;
+
     public float maxSleep;
+    public float fatigueRate;
+    public float sleepSpeed;
 
     //Movement details
         //Algorithm type, tile weights (do they swim/walk? mud/forest?),
