@@ -15,4 +15,13 @@ public static class Tools
     {
         return Resources.Load<CreatureDatabase>("Data/CreatureDatabase.asset");
     }
+
+    public static float DeviateByPercent(float num, float percent)
+    {
+        return DeviateByPercent(num, percent, 0);
+    }
+    public static float DeviateByPercent(float num, float percent, float min)
+    {
+        return Mathf.Max(min, num + Random.Range(-num * percent, num * percent));
+    }
 }

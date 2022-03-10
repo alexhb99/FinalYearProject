@@ -51,6 +51,11 @@ public class ReturningState : PheromoneState
         {
             movement.transform.localRotation *= Quaternion.Euler(0, 0, 180);
             movement.target = null;
+            psm.antColony.StoreNutrition(psm.carriedNutrition);
+
+            //TODO - change this to actual nutrition amount
+            psm.creatureInstance.Eat(psm.creatureInstance.maxHunger);
+
             psm.ChangeState(new SearchingState(psm));
         }
     }

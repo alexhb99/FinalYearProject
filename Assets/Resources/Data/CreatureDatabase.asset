@@ -14,11 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   creatures:
   - name: Ant
-    maxHunger: 100
+    maxHunger: 120
     hungerRate: 1
-    maxThirst: 0
-    thirstRate: 0
-    needThirst: 0
-    maxSleep: 0
-    fatigueRate: 0
-    sleepSpeed: 0
+    maxSleep: 240
+    fatigueRate: 1
+    maxHealth: 100
+    healRate: 1
+    healAtNutritionPercentage: 0.2

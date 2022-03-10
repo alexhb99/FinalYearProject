@@ -9,19 +9,21 @@ public class PheromoneUnit : MonoBehaviour
     public ReturningState returning;
 
     private MovementUnit movement;
+    private CreatureInstance creatureInstance;
 
     public bool drawGizmos;
 
     public void StartPheromone(AntColony antColony, PheromoneController pheromoneController)
     {
         movement = GetComponent<MovementUnit>();
+        creatureInstance = GetComponent<CreatureInstance>();
 
         stateMachine = new PheromoneStateMachine();
 
         searching = new SearchingState(stateMachine);
         returning = new ReturningState(stateMachine);
 
-        stateMachine.Initialize(searching, antColony, movement, pheromoneController);
+        stateMachine.Initialize(searching, antColony, movement, pheromoneController, creatureInstance);
     }
 
     private void Update()

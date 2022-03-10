@@ -12,14 +12,13 @@ public class MovementUnit : MonoBehaviour
     public float turnDeviation;
     public bool drawGizmos;
 
-    private float currentSpeed;
+    [HideInInspector]
+    public float currentSpeed;
     private Vector3 desiredDirection;
 
     private TerrainGenerator terrainGenerator;
 
     private BoundsInt obstacleSensorBounds;
-    private Bounds rightBounds;
-    private BoundsInt leftBounds;
     private float obstacleDistance;
     Vector3Int size;
     Vector3Int halfSize;
@@ -100,8 +99,6 @@ public class MovementUnit : MonoBehaviour
     {
         Vector3Int position = new Vector3Int(Mathf.RoundToInt(transform.position.x + transform.up.x * offsetDistance) - halfSize.x, Mathf.RoundToInt(transform.position.y + transform.up.y * offsetDistance) - halfSize.y, Mathf.RoundToInt(transform.position.z));
         obstacleSensorBounds = new BoundsInt(position, size);
-        leftBounds = new BoundsInt(position, halfSize + Vector3Int.one);
-        rightBounds = new Bounds(transform.position + transform.up * offsetDistance, size);
     }
 
     private void OnDrawGizmos()

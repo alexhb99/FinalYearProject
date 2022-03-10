@@ -16,6 +16,7 @@ public class SearchingState : PheromoneState
     {
         base.Enter(movement);
         searchPheromoneAmount = psm.pheromoneController.searchPheromoneCapacity;
+        psm.carriedNutrition = 0;
     }
 
     public override void Exit()
@@ -107,7 +108,7 @@ public class SearchingState : PheromoneState
     private void PickupFood()
     {
         //Add nutrition
-        float pickedUpAmount = foodUnit.Pickup(1f);
+        psm.carriedNutrition = foodUnit.Pickup(1f);
         movement.target = null;
     }
 
