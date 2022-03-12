@@ -4,17 +4,32 @@ using UnityEngine;
 
 public class FoodUnit : MonoBehaviour
 {
-    private float originalNutrition;
-    Vector3 originalScale;
     public float nutrition;
+    [HideInInspector]
+    public float originalNutrition;
+    [HideInInspector]
+    public float maxNutrition;
+    private float growthRate;
+
     private List<MovementUnit> incomingAnts = new List<MovementUnit>();
 
-    public void Initialize(float nutrition)
+    private TimeController timeController;
+
+
+    public void Initialize(float nutrition, float maxNutrition, float growthRate)
     {
+        timeController = GameObject.FindWithTag("GlobalLight").GetComponent<TimeController>();
+
         this.nutrition = nutrition;
+        this.maxNutrition = maxNutrition;
+        this.growthRate = growthRate;
         originalNutrition = nutrition;
-        originalScale = Vector3.one + new Vector3(Mathf.Min(10f, originalNutrition / 10f - 1), Mathf.Min(10f, originalNutrition / 10f - 1), 0);
         SetScaleFromNutrition();
+    }
+
+    private void Update()
+    {
+        Grow();
     }
 
     public void AssignIncomingAnt(MovementUnit newAnt)
@@ -49,7 +64,19 @@ public class FoodUnit : MonoBehaviour
         }
         else
         {
-            transform.localScale = Vector3.one + new Vector3(originalScale.x * nutrition / originalNutrition, originalScale.y * nutrition / originalNutrition, 1);
+
+            float val = Mathf.Log(nutrition * 0.5f) * 2f;
+            transform.localScale = Vector3.one + new Vector3(val, val, 0);
+        }
+    }
+
+    private void Grow()
+    {
+        if (timeController != null && timeController.lightLevel > 0.01f && nutrition < maxNutrition)
+        {
+            float growth = Mathf.Min(maxNutrition - nutrition, Time.deltaTime * TimeControls.timeScale * timeController.lightLevel * growthRate);
+            nutrition += growth;
+            SetScaleFromNutrition();
         }
     }
 }

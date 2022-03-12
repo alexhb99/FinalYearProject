@@ -27,6 +27,18 @@ public class SimulationController : MonoBehaviour
         pheromoneController = GetComponent<PheromoneController>();
     }
 
+    public void StartSimulation(Vector2Int size, int seed, float scale, int octaves, float persistance, float lacunarity)
+    {
+        terrainGenerator.size = size;
+        terrainGenerator.seed = seed;
+        terrainGenerator.scale = scale;
+        terrainGenerator.octaves = octaves;
+        terrainGenerator.persistance = persistance;
+        terrainGenerator.lacunarity = lacunarity;
+
+        StartSimulation();
+    }
+
     private void StartSimulation()
     {
         RemoveOldSimulation();
@@ -42,6 +54,7 @@ public class SimulationController : MonoBehaviour
 
     private void RemoveOldSimulation()
     {
+        terrainGenerator.tilemap.ClearAllTiles();
         foreach(Transform child in creatureParent)
         {
             Destroy(child.gameObject);

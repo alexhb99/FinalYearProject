@@ -16,6 +16,7 @@ public static class Tools
         return Resources.Load<CreatureDatabase>("Data/CreatureDatabase.asset");
     }
 
+    //Percent is in decimal formet (1f = 100%, 0.5f = 50%)
     public static float DeviateByPercent(float num, float percent)
     {
         return DeviateByPercent(num, percent, 0);

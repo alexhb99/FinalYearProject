@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class TimeController : MonoBehaviour
 {
@@ -9,11 +10,14 @@ public class TimeController : MonoBehaviour
     public float sunriseTime;
     public float sunsetTime;
 
+    [HideInInspector]
+    public float lightLevel;
     private bool doneSunrise;
     private bool doneSunset;
     private int days;
 
     private Animator lightAC;
+    private Light2D light2D;
 
     private void Start()
     {
@@ -25,6 +29,7 @@ public class TimeController : MonoBehaviour
         time = daySeconds / 2f;
 
         lightAC = GetComponent<Animator>();
+        light2D = GetComponent<Light2D>();
     }
 
     private void Update()
@@ -36,8 +41,9 @@ public class TimeController : MonoBehaviour
     private void Tick()
     {
         time += Time.deltaTime * TimeControls.timeScale;
+        lightLevel = Mathf.InverseLerp(0.52549f, 1f, light2D.color.g);    //Get light level from looking at green component of light colour - 0.52549f is the g component at night
 
-        if(!doneSunset && time > daySeconds * sunsetTime)
+        if (!doneSunset && time > daySeconds * sunsetTime)
         {
             lightAC.SetTrigger("Sunset");
             doneSunset = true;

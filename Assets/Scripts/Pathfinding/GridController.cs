@@ -10,6 +10,7 @@ public class GridController : MonoBehaviour
     public Vector3 gridStartPos;
     public Node[,] grid;
 
+    [HideInInspector]
     public Vector2Int size;
     public bool displayGridGizmos;
 

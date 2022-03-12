@@ -5,7 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    private Tilemap tilemap;
+    [HideInInspector]
+    public Tilemap tilemap;
     private GridController gridController;
     private TerrainDatabase terrainDatabase;
 

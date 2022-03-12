@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class FloraGenerator : MonoBehaviour
 {
-    private const float MaxNutrition = 40f;
+    private const float MaxNutrition = 200f;
     private const float MinNutrition = 20f;
 
     public GameObject foodPrefab;
@@ -18,10 +18,49 @@ public class FloraGenerator : MonoBehaviour
     public Transform foodParent;
     private List<Node> availableSpaces;
 
+    private float timeToSpawn;
+    public float roughTimeToSpawn;
+
     private void Start()
     {
         gridController = GameObject.FindWithTag("Pathfinding").GetComponent<GridController>();
         foodParent = GameObject.FindWithTag("FoodParent").transform;
+
+        ResetSpawnClock();
+    }
+
+    private void Update()
+    {
+        if(gridController.grid != null)
+        {
+            timeToSpawn -= Time.deltaTime * TimeControls.timeScale;
+            if(timeToSpawn < 0)
+            {
+                GetApplicableSpaces();
+                SpawnFlora();
+                ResetSpawnClock();
+            }
+        }
+    }
+
+    private void ResetSpawnClock()
+    {
+        timeToSpawn = Tools.DeviateByPercent(roughTimeToSpawn, 0.2f, 0.1f);
+    }
+
+    private void SpawnFlora()
+    {
+        if (availableSpaces.Count == 0)
+        {
+            return;
+        }
+
+        Node space = availableSpaces[Random.Range(0, availableSpaces.Count)];
+        Vector3 pos = space.worldPosition + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), 0);
+
+        GameObject foodObject = Instantiate(foodPrefab, pos, Quaternion.identity, foodParent);
+
+        foodObject.GetComponent<FoodUnit>().Initialize(Random.Range(MinNutrition / 2f, MinNutrition), Random.Range(MinNutrition, MaxNutrition), Random.Range(0.5f, 3f));
     }
 
     public void GenerateFlora()
@@ -35,16 +74,7 @@ public class FloraGenerator : MonoBehaviour
 
         for(int i = 0; i < foodCount; i++)
         {
-            if(availableSpaces.Count == 0)
-            {
-                break;
-            }
-
-            Node space = availableSpaces[Random.Range(0, availableSpaces.Count)];
-            Vector3 pos = space.worldPosition + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), 0);
-
-            GameObject foodObject = Instantiate(foodPrefab, pos, Quaternion.identity, foodParent);
-            foodObject.GetComponent<FoodUnit>().Initialize(Random.Range(MinNutrition, MaxNutrition));
+            SpawnFlora();
         }
     }
 

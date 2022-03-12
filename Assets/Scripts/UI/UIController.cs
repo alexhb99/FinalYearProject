@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
@@ -14,11 +15,35 @@ public class UIController : MonoBehaviour
 
     private List<GameObject> creatorMenus;
 
+    private SimulationController simulationController;
+
+    private GameObject setupInterface;
+    private GameObject closeIcon;
+    private Vector2Input worldSize;
+    private RandIntValue seed;
+    private FloatInput scale;
+    private IntInput octaves;
+    private SimpleFloatSliderInput persistance;
+    private FloatInput lacunarity;
+
     private void Start()
     {
         creatorMenus = new List<GameObject>();
         creatorMenus.Add(antColonyCreator);
         creatorMenus.Add(foodSourceCreator);
+
+        simulationController = GameObject.FindWithTag("SimulationController").GetComponent<SimulationController>();
+
+        Transform worldSetup = GameObject.FindWithTag("WorldGenerationSetup").transform;
+        setupInterface = worldSetup.parent.gameObject;
+        closeIcon = setupInterface.transform.GetChild(1).gameObject;
+        closeIcon.SetActive(false);
+        worldSize = worldSetup.GetChild(0).GetComponent<Vector2Input>();
+        seed = worldSetup.GetChild(1).GetComponent<RandIntValue>();
+        scale = worldSetup.GetChild(2).GetComponent<FloatInput>();
+        octaves = worldSetup.GetChild(3).GetComponent<IntInput>();
+        persistance = worldSetup.GetChild(4).GetComponent<SimpleFloatSliderInput>();
+        lacunarity = worldSetup.GetChild(5).GetComponent<FloatInput>();
 
         foreach (GameObject creatorMenu in creatorMenus)
         {
@@ -38,5 +63,17 @@ public class UIController : MonoBehaviour
         {
             creatorMenu.SetActive(uiElement.name == creatorMenu.name ? !uiElement.activeInHierarchy : false);
         }
+    }
+
+    public void BeginSimulation()
+    {
+        simulationController.StartSimulation(worldSize.GetVector2Int(), seed.GetValue(), scale.GetValue(), octaves.GetValue(), persistance.GetValue(), lacunarity.GetValue());
+        closeIcon.SetActive(true);
+        setupInterface.SetActive(false);
+    }
+
+    public void ToggleSetupSimulation()
+    {
+        setupInterface.SetActive(!setupInterface.activeInHierarchy);
     }
 }

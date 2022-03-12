@@ -15,6 +15,8 @@ public class FoodSourceGhost : MonoBehaviour
     private Color negativeColour = new Color(0.752f, 0.213f, 0.1366809f, 0.7843137f);
 
     IntSliderInput nutrition;
+    IntSliderInput maxNutrition;
+    FloatSliderInput growthRate;
 
     private void Start()
     {
@@ -24,7 +26,9 @@ public class FoodSourceGhost : MonoBehaviour
         foodParent = GameObject.FindWithTag("FoodParent").transform;
 
         UIController ui = GameObject.FindWithTag("SimulationController").GetComponent<UIController>();
-        nutrition = ui.foodSourceCreator.transform.GetChild(2).GetComponent<IntSliderInput>();
+        nutrition = ui.foodSourceCreator.transform.GetChild(2).GetChild(0).GetComponent<IntSliderInput>();
+        maxNutrition = ui.foodSourceCreator.transform.GetChild(2).GetChild(1).GetComponent<IntSliderInput>();
+        growthRate = ui.foodSourceCreator.transform.GetChild(2).GetChild(2).GetComponent<FloatSliderInput>();
 
         if (nutrition.slider.value < 1)
         {
@@ -32,8 +36,8 @@ public class FoodSourceGhost : MonoBehaviour
         }
         else
         {
-            Vector3 scalar = new Vector3(Mathf.Min(10f, nutrition.slider.value / 10f - 1), Mathf.Min(10f, nutrition.slider.value / 10f - 1), 0);
-            transform.localScale = Vector3.one + scalar;
+            float val = Mathf.Log(nutrition.slider.value * 0.5f) * 2f;
+            transform.localScale = Vector3.one * 0.5f + new Vector3(val, val, 0);
         }
     }
 
@@ -66,7 +70,7 @@ public class FoodSourceGhost : MonoBehaviour
         if (canPlace)
         {
             GameObject instance = Instantiate(prefab, (Vector2)transform.position, Quaternion.identity, foodParent);
-            instance.GetComponent<FoodUnit>().Initialize((int)nutrition.slider.value);
+            instance.GetComponent<FoodUnit>().Initialize((int)nutrition.slider.value, Mathf.Max((int)nutrition.slider.value, (int)maxNutrition.slider.value), growthRate.slider.value);
         }
         Destroy(gameObject);
     }
