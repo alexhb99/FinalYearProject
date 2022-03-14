@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using TMPro;
 
 public class TimeController : MonoBehaviour
 {
@@ -10,23 +11,23 @@ public class TimeController : MonoBehaviour
     public float sunriseTime;
     public float sunsetTime;
 
+    public TMP_Text daysUI;
+    public TMP_Text timeUI;
+
     [HideInInspector]
     public float lightLevel;
     private bool doneSunrise;
     private bool doneSunset;
     private int days;
 
+    private bool canTick;
+
     private Animator lightAC;
     private Light2D light2D;
 
     private void Start()
     {
-        doneSunrise = true;
-        doneSunset = false;
-        days = 0;
-
-        //Start at midday!
-        time = daySeconds / 2f;
+        canTick = false;
 
         lightAC = GetComponent<Animator>();
         light2D = GetComponent<Light2D>();
@@ -35,7 +36,10 @@ public class TimeController : MonoBehaviour
     private void Update()
     {
         lightAC.speed = TimeControls.timeScale;
-        Tick();
+        if (canTick)
+        {
+            Tick();
+        }
     }
 
     private void Tick()
@@ -60,6 +64,26 @@ public class TimeController : MonoBehaviour
             doneSunrise = false;
             doneSunset = false;
             days++;
+
+            daysUI.text = "Days: " + days;
         }
+
+        timeUI.text = "Time: " + time.ToString("F2");
+    }
+
+    public void SetParameters(float timeInDay, float sunrise, float sunset)
+    {
+        daySeconds = timeInDay;
+        sunriseTime = sunrise;
+        sunsetTime = sunset;
+
+        doneSunrise = true;
+        doneSunset = false;
+        days = 0;
+
+        //Start at midday!
+        time = daySeconds / 2f;
+
+        canTick = true;
     }
 }

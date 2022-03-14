@@ -16,6 +16,7 @@ public class UIController : MonoBehaviour
     private List<GameObject> creatorMenus;
 
     private SimulationController simulationController;
+    private TimeController timeController;
 
     private GameObject setupInterface;
     private GameObject closeIcon;
@@ -26,6 +27,10 @@ public class UIController : MonoBehaviour
     private SimpleFloatSliderInput persistance;
     private FloatInput lacunarity;
 
+    private FloatInput lengthOfDay;
+    private FloatInput sunriseTime;
+    private FloatInput sunsetTime;
+
     private void Start()
     {
         creatorMenus = new List<GameObject>();
@@ -33,6 +38,7 @@ public class UIController : MonoBehaviour
         creatorMenus.Add(foodSourceCreator);
 
         simulationController = GameObject.FindWithTag("SimulationController").GetComponent<SimulationController>();
+        timeController = GameObject.FindWithTag("GlobalLight").GetComponent<TimeController>();
 
         Transform worldSetup = GameObject.FindWithTag("WorldGenerationSetup").transform;
         setupInterface = worldSetup.parent.gameObject;
@@ -44,6 +50,11 @@ public class UIController : MonoBehaviour
         octaves = worldSetup.GetChild(3).GetComponent<IntInput>();
         persistance = worldSetup.GetChild(4).GetComponent<SimpleFloatSliderInput>();
         lacunarity = worldSetup.GetChild(5).GetComponent<FloatInput>();
+
+        Transform dayNightCycleSetup = GameObject.FindWithTag("DayNightCycleSetup").transform;
+        lengthOfDay = dayNightCycleSetup.GetChild(0).GetComponent<FloatInput>();
+        sunriseTime = dayNightCycleSetup.GetChild(1).GetComponent<FloatInput>();
+        sunsetTime = dayNightCycleSetup.GetChild(2).GetComponent<FloatInput>();
 
         foreach (GameObject creatorMenu in creatorMenus)
         {
@@ -67,6 +78,8 @@ public class UIController : MonoBehaviour
 
     public void BeginSimulation()
     {
+        timeController.SetParameters(lengthOfDay.GetValue(), sunriseTime.GetValue(), sunsetTime.GetValue());
+
         simulationController.StartSimulation(worldSize.GetVector2Int(), seed.GetValue(), scale.GetValue(), octaves.GetValue(), persistance.GetValue(), lacunarity.GetValue());
         closeIcon.SetActive(true);
         setupInterface.SetActive(false);

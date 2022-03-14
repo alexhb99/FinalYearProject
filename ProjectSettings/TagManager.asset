@@ -12,6 +12,7 @@ TagManager:
   - SimulationController
   - GlobalLight
   - WorldGenerationSetup
+  - DayNightCycleSetup
   layers:
   - Default
   - TransparentFX
