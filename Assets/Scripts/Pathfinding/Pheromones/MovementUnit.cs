@@ -18,6 +18,7 @@ public class MovementUnit : MonoBehaviour
 
     private TerrainGenerator terrainGenerator;
 
+    //Used for sensing tiles
     private BoundsInt obstacleSensorBounds;
     private float obstacleDistance;
     Vector3Int size;
@@ -25,6 +26,7 @@ public class MovementUnit : MonoBehaviour
     float offsetDistance;
     Vector3 offsetVector;
 
+    //Used in identifying targets to move towards
     [HideInInspector]
     public Vector3? target;
     [HideInInspector]
@@ -63,36 +65,39 @@ public class MovementUnit : MonoBehaviour
 
     private void RandomWandering(Vector3 offset)
     {
+        //Get a new direction from a random force and an external offset force added to the current direction
         Vector3 randDir = Random.insideUnitCircle * turnDeviation;
         desiredDirection = (desiredDirection + randDir + offset).normalized;
 
+        //Rotate towards this new desired direction
         float angle = Mathf.Atan2(desiredDirection.y, desiredDirection.x) * Mathf.Rad2Deg - 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, q, randomTurnSpeed * TimeControls.timeScale);
 
+        //Change the speed of the ant
         //Slow down when close to wall!
         float obstacleDistanceScalar = (obstacleDistance < 4f ? Mathf.Max(0.00001f, ((obstacleDistance - 1) / 4f) - 0.25f) : 1);
         float targetSpeed = Mathf.Max(0, moveSpeed * obstacleDistanceScalar);
         currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * TimeControls.timeScale * acceleration * 1 / obstacleDistanceScalar);
+
+        //Update the position according to speed
         transform.position += currentSpeed * Time.deltaTime * TimeControls.timeScale * transform.up;
     }
 
     private void WalkToTarget()
     {
-        GetTargetDistance();
+        //Set distance between target and creature
+        diff = (Vector3)(target - transform.position);
+        diff.z = 0;
 
+        //Rotate towards target
         float angle = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg - 90;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, q, targetTurnSpeed * TimeControls.timeScale);
 
+        //Move
         currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, Time.deltaTime * TimeControls.timeScale * acceleration);
         transform.position += currentSpeed * Time.deltaTime * TimeControls.timeScale * transform.up;
-    }
-
-    public void GetTargetDistance()
-    {
-        diff = (Vector3)(target - transform.position);
-        diff.z = 0;
     }
 
     private void UpdateScannerBounds()
@@ -210,8 +215,11 @@ public class MovementUnit : MonoBehaviour
         offsetVector = normal;
         if (normal != Vector3.zero)
         {
-            //A vector at either -90 or 90 degrees to the front facing vector (transform.up) depending on left and right unwalkable terrain counts
-            Vector3 incoming = (float)leftSensorWallCount / leftSensorCount < (float)rightSensorWallCount / rightSensorCount ? new Vector3(-transform.up.y, transform.up.x) : new Vector3(transform.up.y, -transform.up.x);
+            //A vector at either -90 or 90 degrees to transform.up (forward vector) depending on left and right unwalkable terrain counts
+            Vector3 incoming = 
+                (float)leftSensorWallCount / leftSensorCount < (float)rightSensorWallCount / rightSensorCount
+                ? new Vector3(-transform.up.y, transform.up.x)
+                : new Vector3(transform.up.y, -transform.up.x);
 
             if(Vector3.Dot(normal, transform.up) <= 0 && obstacleDistance > 3f)
             {

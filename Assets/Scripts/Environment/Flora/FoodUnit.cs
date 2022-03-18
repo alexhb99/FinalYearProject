@@ -64,7 +64,6 @@ public class FoodUnit : MonoBehaviour
         }
         else
         {
-
             float val = Mathf.Log(nutrition * 0.5f) * 2f;
             transform.localScale = Vector3.one + new Vector3(val, val, 0);
         }

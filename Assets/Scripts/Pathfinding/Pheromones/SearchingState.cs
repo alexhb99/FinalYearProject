@@ -62,15 +62,19 @@ public class SearchingState : PheromoneState
     {
         base.SensePheromones();
 
+        //Get the position of the leftmost sensor
         Vector3 pos = movement.transform.position + movement.transform.up - movement.transform.right * halfSampleSize.x;
 
+        //Stores intensity measured in each of the 3 sensors
         float[] sensorIntensities = new float[3];
 
         for (int i = 0; i < 3; i++)
         {
+            //Place this sensor on the appropriate tile
             Vector3 sampledPosition = pos + movement.transform.right * i;
             sampledPosition = new Vector3(Mathf.Round(sampledPosition.x), Mathf.Round(sampledPosition.y), 0);
 
+            //In a 3x3 area around this sensor, add up the intensities of pheromones
             for (int x = -1; x <= 1; x++)
             {
                 for (int y = -1; y <= 1; y++)
@@ -84,17 +88,17 @@ public class SearchingState : PheromoneState
             }
         }
 
-        //Left
+        //Left sensor
         if (sensorIntensities[0] > Mathf.Max(sensorIntensities[1], sensorIntensities[2]))
         {
             return movement.transform.up - movement.transform.right * halfSampleSize.x;
         }
-        //Right
+        //Right sensor
         else if (sensorIntensities[2] > sensorIntensities[1])
         {
             return movement.transform.up + movement.transform.right * halfSampleSize.x;
         }
-        //Centre
+        //Centre sensor
         else if (sensorIntensities[1] > sensorIntensities[2])
         {
             return movement.transform.up;
@@ -115,12 +119,18 @@ public class SearchingState : PheromoneState
     public override void DetectTriggerCollision(Collider2D other)
     {
         base.DetectTriggerCollision(other);
+
+        //If currently not chasing food
         if (foodUnit == null)
         {
             foodUnit = other.gameObject.GetComponent<FoodUnit>();
+            //Check the other object has a FoodUnit component attached to it
             if(foodUnit != null)
             {
+                //Set creature's target as this object
                 movement.target = other.gameObject.transform.position;
+
+                //Assign this creature to the food
                 foodUnit.AssignIncomingAnt(movement);
             }
         }

@@ -45,7 +45,8 @@ public class TimeController : MonoBehaviour
     private void Tick()
     {
         time += Time.deltaTime * TimeControls.timeScale;
-        lightLevel = Mathf.InverseLerp(0.52549f, 1f, light2D.color.g);    //Get light level from looking at green component of light colour - 0.52549f is the g component at night
+        //Get light level from looking at green component of light colour - 0.52549f is the g component at night
+        lightLevel = Mathf.InverseLerp(0.52549f, 1f, light2D.color.g);
 
         if (!doneSunset && time > daySeconds * sunsetTime)
         {
