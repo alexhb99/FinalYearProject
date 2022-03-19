@@ -40,6 +40,8 @@ public class CameraController : MonoBehaviour
             dragOffset = Vector3.zero;
         }
 
+        dragOffset += new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0) * dragSpeed;
+
         targetSize = Mathf.Clamp(targetSize - (Input.mouseScrollDelta.y * 8 * cam.orthographicSize / camZoomBounds.y), camZoomBounds.x, camZoomBounds.y);
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetSize, Time.deltaTime * scrollSpeed);
     }
